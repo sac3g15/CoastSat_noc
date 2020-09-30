@@ -1,0 +1,4 @@
+filename	L7_Benin_Togo_0_median_2000.tif
+epsg	4326
+dates	2000
+median_no	3
