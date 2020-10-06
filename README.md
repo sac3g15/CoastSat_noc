@@ -73,7 +73,7 @@ Task time = ~10 mins
 !The use of smaller ROIs also reduces the volume of data downloaded.
 ```
 1. Open ArcGIS map document and save in appropriate directory
-2. First, we create a coastline of the study area. (See Note: below if the study area is large – e.g. Country-scale).
+2. First, we create a coastline of the study area. (See below if the study area is large – e.g. Country-scale).
 3. In the geodatabase, create a feature class (right-click geodatabase) and select a line feature.
 4. In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
 ```diff
@@ -100,19 +100,40 @@ Task time = ~10 mins
     1. Edit ROIs using ‘edit vertices’ or ‘reshape’ tools.
 
 ### 3.2 Extract Coordinates
-Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can also be run via the edit window which can be more reliable if a process fails. A breakdown of the processes in the models is below for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
-i.	In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
-ii.	Double click ‘Extract Coordinates’ to open processor
-iii.	Input ROIs and the output location folder (e.g. ‘CoastSat-master_vSC’)
-iv.	Run.
+Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane. A breakdown of the processes in the models is given in the handbook (INSERT LINK) for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
+
+1. In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
+2. Double click ‘Extract Coordinates’ to open processor
+3. Input ROIs and the output location folder (e.g. ‘CoastSat-master_vSC’)
+4. Run.
 
 Once the table is saved the coordinates are in a table format, but we need a list…
-v.	Open in excel. Delete Column OBJECTID and top row, then click save
-vi.	Re-open the saved file in a text editor (notepad/notepad++)
-vii.	Find and Replace.
-viii.	Find ‘ ” ’. Replace ‘ ‘.
-ix.	Find ‘ ]]), ’. Replace ‘ ]]),\ ‘.
-x.	Remove \ symbol on the last coordinate
+5. Open in excel. Delete Column OBJECTID and top row, then click save
+6. Re-open the saved file in a text editor (notepad/notepad++)
+7. Find and Replace.
+8. Find ‘ ” ’. Replace ‘ ‘.
+9. Find ‘ ]]), ’. Replace ‘ ]]),\ ‘.
+10. Remove \ symbol on the last coordinate
+
+### 3.3	Begin processing
+1. Open Jupyter Notebook (following instructions in ‘Usage’) if not already open and navigate to `StudyArea_shoreline.ipyNote:`
+2. Hit run on the initial settings and the edited code after “1. Retrieval of the images from GEE”
+3. After a few minutes of processing, navigate to the data folder in Coastsat_master. Find the output. geojson file and export to software to ensure the correct output is viewed.
+
+```diff
+! Note: The following shows a common error:
+!   ‘HTTPError: HTTP Error 500: Internal Server Error’.
+! This is due to a network error with Google Earth Engine which is caused by a timeout using
+! the getDownloadURL function – looking into this issue. This error can be frequent, and occurs
+! less frequently during evenings (GMT). If this occurs:
+!   i.	Find number of folders in C:\Coastsat_master\data. E.g. Tunisia_ 27.
+!   ii.	Remove last folder (as shorelines haven’t been created for this folder). I.e. Delete Tunisia_27
+!   iii.	Cut and paste the first 26 ROIs, and place them elsewhere (I keep them in the same code and comment them out)
+!   iv.	In the For loop, change sitename to “Sitename = counter + 27 “
+!   v.	Re-run model. The model will continue to process shorelines from the previous point.
+!   vi.	Repeat this process if it occurs again. Maintain continuous file number to prevent overwrite. 
+ ```
+
 
 ## Issues
 Having a problem? Post an issue in the [Issues page](https://github.com/kvos/coastsat/issues) (please do not email).
