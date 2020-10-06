@@ -74,29 +74,31 @@ Task time = ~10 mins
 4. In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
 
 ```diff
- **Note**: If the study site is large, you can convert administrative boundary polygons into lines
-           from the Humanitarian Data Exchange (https://data.humdata.org/).
- Download the top-level (0) boundary.
- 1. Extract into directory with map document. Import into map document geodatabase.
- 2. Check line. Does it fit the shoreline roughly (within ~800m)?
-    If not, retrieve boundary from different source or draw a rough shoreline.
- 3. Convert the boundary polygon to a polyline. 
-     1. Feature to line
-     2. Input = Top-level admin boundary
-     3. Output = Geodatabase
- 4. Use split tool to remove inland lines and save single coastal line]
+! **Note**: If the study site is large, you can convert administrative boundary polygons into lines
+!           from the Humanitarian Data Exchange (https://data.humdata.org/).
+! 1. Download the top-level (0) boundary.
+! 2. Extract into directory with map document. Import into map document geodatabase.
+! 4. Check line. Does it fit the shoreline roughly (within ~800m)?
+!    If not, retrieve boundary from different source or draw a rough shoreline.
+! 4. Convert the boundary polygon to a polyline. 
+!     1. Feature to line
+!     2. Input = Top-level admin boundary
+!     3. Output = Geodatabase
+! 5. Use split tool to remove inland lines and save single coastal line]
 ```
 
 5. Create regions of interest (ROI) boxes along coast.
-```Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
-a.	Strip Map Index Features
-b.	Length along line = 11km
-c.	Perpendicular to the line = 2
-d.	Overlap = 0
-vi.	Zoom to individual ROIs to ensure that all possible shorelines are contained within the box.
-a.	Edit those using ‘edit vertices’ or ‘reshape’ tools.
-Note:: Try not to create/remove boxes, if needed, maintain a continuous page number between ROIs
-I.	Extract Coordinates
+```diff
+!Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
+```
+    1. Strip Map Index Features
+    2. Length along line = 11km
+    3. Perpendicular to the line = 2
+    4. Overlap = 0
+6. Zoom to individual ROIs to ensure that all possible shorelines are contained within the box.
+    1. Edit those using ‘edit vertices’ or ‘reshape’ tools.
+
+### 3.2 Extract Coordinates
 Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can also be run via the edit window which can be more reliable if a process fails. A breakdown of the processes in the models is below for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
 i.	In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
 ii.	Double click ‘Extract Coordinates’ to open processor
