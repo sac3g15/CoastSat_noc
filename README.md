@@ -55,15 +55,15 @@ To retrieve from the GEE server the available satellite images cropped around th
 
 Task time = ~10 mins
 
-  a. Open Jupyter Notebook (following instructions in ‘Usage’)
-    1. Download ‘CoastSat-master_vSC’ and navigate to example_jupyter, copy, then rename example_jupyter.ipynb. E.g. ‘Tunisia_shoreline_2000_2020’
-    2. Edit the following variables:
-  a. `Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
-  b. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
-  c. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections)
-  d. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
-  e. `Settings`
-    i. `Output_epsg` = Country-specific coordinate system (see https://epsg.io/)
+a. Open Jupyter Notebook (following instructions in ‘Usage’)
+  i. Download ‘CoastSat-master_vSC’ and navigate to example_jupyter, copy, then rename example_jupyter.ipynb. E.g. ‘Tunisia_shoreline_2000_2020’
+  ii. Edit the following variables:
+a. `Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
+b. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
+c. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections)
+d. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
+e. `Settings`
+  i. `Output_epsg` = Country-specific coordinate system (see https://epsg.io/)
 
 ### 3.1 Example of how to create a coordinate list at study site
 This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis 
