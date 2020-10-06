@@ -40,13 +40,13 @@ To run the examples you will need to install the coastsat environment and activa
 
 ## 2. Usage
 
-An example of how to run the software in a Jupyter Notebook is provided in the repository (`StudyArea_shoreline.ipynb`). To run this, first activate your `coastsat` environment with `conda activate coastsat` (if not already active), and then type:
+An example of how to run the software in a Jupyter Notebook is provided in the repository (`StudyArea_shoreline.ipyNote:`). To run this, first activate your `coastsat` environment with `conda activate coastsat` (if not already active), and then type:
 
 ```
 jupyter notebook
 ```
 
-A web browser window will open. Point to the directory where you downloaded this repository and click on `StudyArea_shoreline.ipynb`.
+A web browser window will open. Point to the directory where you downloaded this repository and click on `StudyArea_shoreline.ipyNote:`.
 
 A Jupyter Notebook combines formatted text and code. To run the code, place your cursor inside one of the code sections and click on the `run cell` button and progress forward.
 
@@ -56,7 +56,7 @@ To retrieve from the GEE server the available satellite images cropped around th
 Task time = ~10 mins
 
 1.  Open Jupyter Notebook (following instructions in ‘Usage’)
-    1. Download ‘CoastSat-master_vSC’ and navigate to StudyArea_shoreline, copy, then rename StudyArea_shoreline.ipynb. E.g. ‘Tunisia_shoreline_2000_2020’
+    1. Download ‘CoastSat-master_vSC’ and navigate to StudyArea_shoreline, copy, then rename StudyArea_shoreline.ipyNote:. E.g. ‘Tunisia_shoreline_2000_2020’
     2. Edit the following variables:
 2. `Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
 3. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
@@ -69,12 +69,13 @@ Task time = ~10 mins
 This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis 
 Task time = ~10 mins
 1. Open ArcGIS map document and save in appropriate directory
-2. First, we create a coastline of the study area. (See NB below if the study area is large – e.g. Country-scale).
+2. First, we create a coastline of the study area. (See Note: below if the study area is large – e.g. Country-scale).
 3. In the geodatabase, create a feature class (right-click geodatabase) and select a line feature.
 4. In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
 
 ```diff
-!If the study site is large, you can convert administrative boundary polygons into lines from the Humanitarian Data Exchange (https://data.humdata.org/). Download the top-level (0) boundary. Download the lower-level (2) as they will be helpful to derive regional shoreline change statistics later on in the workflow.
+! **Note**: If the study site is large, you can convert administrative boundary polygons into lines from the Humanitarian Data Exchange (https://data.humdata.org/).
+! Download the top-level (0) boundary.
 ! 1. Extract into directory with map document. Import into map document geodatabase.
 ! 2. Check line. Does it fit the shoreline roughly (within ~800m)? If not, retrieve boundary from different source or draw a rough shoreline.
 ! 3. Convert the boundary polygon to a polyline. 
@@ -85,14 +86,14 @@ Task time = ~10 mins
 ```
 
 v.	Create regions of interest (ROI) boxes along coast.
-NB: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
+Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
 a.	Strip Map Index Features
 b.	Length along line = 11km
 c.	Perpendicular to the line = 2
 d.	Overlap = 0
 vi.	Zoom to individual ROIs to ensure that all possible shorelines are contained within the box.
 a.	Edit those using ‘edit vertices’ or ‘reshape’ tools.
-NB: Try not to create/remove boxes, if needed, maintain a continuous page number between ROIs
+Note:: Try not to create/remove boxes, if needed, maintain a continuous page number between ROIs
 I.	Extract Coordinates
 Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can also be run via the edit window which can be more reliable if a process fails. A breakdown of the processes in the models is below for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
 i.	In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
