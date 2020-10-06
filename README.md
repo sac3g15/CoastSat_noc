@@ -104,7 +104,8 @@ Once the ROIs have been established, we need to extract the coordinates to a lis
 
 <details>
            <summary>Model Breakdown</summary>
-           <p>           
+           <p>
+                      
 1.	Extract coordinates of outer boundaries of the ROIs
     1. Feature vertices to points
     2. Input = ROIs
