@@ -104,39 +104,39 @@ Once the ROIs have been established, we need to extract the coordinates to a lis
 
 <details>
            <summary>Model Breakdown</summary>
-           <p>‘Extract Coordinates’ - Model Breakdown
-i.	Extract coordinates of outer boundaries of the ROIs
-a.	Feature vertices to points
-b.	Input = ROIs
-c.	Point type  = All vertices
-ii.	Find XY position
-a.	Add fields (XY) (x2)
-b.	Input = ROI points
-c.	Field type = Double
-d.	Calculate geometry (right click field name)
-i.	x = x-point coordinate
-ii.	y = y-point coordinate
-iii.	Use decimal degree format
-iii.	Find max/min XY coordinates
-a.	Dissolve
-b.	Dissolve Field = Pg_no
-c.	Statistics fields
-i.	max x
-ii.	min x
-iii.	max y
-iv.	min y
-d.	Create multipart features – checked
-e.	Unsplit lines – unchecked
-iv.	Combine coordinates
-a.	Add field (‘xytext’)
-b.	Calculate field
-c.	Field name = xytext
-d.	Xytext = "([[" + str(!MAX_x!) + "," + str(!MAX_y!) + "],[" + str(!MAX_x!) + "," + str(!MIN_y!) + "],[" + str(!MIN_x!) + "," + str(!MAX_y!) + "],["  + str(!MIN_x!) + "," + str(!MIN_y!) + "]]),"
-v.	Export attribute table
-a.	Right click layer in contents panel
-b.	Export table
-c.	Save in directory as .csv
-d.	Output fields = xytext
+           <p>           
+1.	Extract coordinates of outer boundaries of the ROIs
+    1. Feature vertices to points
+    2. Input = ROIs
+    3. Point type  = All vertices
+2. Find XY position
+    1. Add fields (XY) (x2)
+    2. Input = ROI points
+    3. Field type = Double
+    4.Calculate geometry (right click field name)
+        1. x = x-point coordinate
+        2. y = y-point coordinate
+        3. Use decimal degree format
+3. Find max/min XY coordinates
+    1. Dissolve
+    2. Dissolve Field = Pg_no
+    3. Statistics fields
+        1. max x
+        2. min x
+        3. max y
+        4. min y
+    4. Create multipart features – checked
+    5. Unsplit lines – unchecked
+4.	Combine coordinates
+    1. Add field (‘xytext’)
+    2. Calculate field
+    3. Field name = xytext
+    4. xytext = "([[" + str(!MAX_x!) + "," + str(!MAX_y!) + "],[" + str(!MAX_x!) + "," + str(!MIN_y!) + "],[" + str(!MIN_x!) + "," + str(!MAX_y!) + "],["  + str(!MIN_x!) + "," + str(!MIN_y!) + "]]),"
+5.	Export attribute table
+    1. Right click layer in contents panel
+    2. Export table
+    3. Save in directory as .csv
+    4. Output fields = xytext
 </p>
          </details>
 
