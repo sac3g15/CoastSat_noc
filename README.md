@@ -73,15 +73,16 @@ Task time = ~10 mins
 3. In the geodatabase, create a feature class (right-click geodatabase) and select a line feature.
 4. In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
 
-- ![If the study site is large, you can convert administrative boundary polygons into lines from the Humanitarian Data Exchange (https://data.humdata.org/). Download the top-level (0) boundary. Download the lower-level (2) as they will be helpful to derive regional shoreline change statistics later on in the workflow.
-  1.	Extract into directory with map document. Import into map document geodatabase.
-  2.	Check line. Does it fit the shoreline roughly (within ~800m)? If not, retrieve boundary from different source or draw a rough shoreline.
-  3.	Convert the boundary polygon to a polyline. 
-      1. Feature to line
-      2. Input = Top-level admin boundary
-      3. Output = Geodatabase
-  4.	Use split tool to remove inland lines and save single coastal line]
-(https://via.placeholder.com/15/f03c15/000000?text=+) `#f03c15`
+```diff
+!If the study site is large, you can convert administrative boundary polygons into lines from the Humanitarian Data Exchange (https://data.humdata.org/). Download the top-level (0) boundary. Download the lower-level (2) as they will be helpful to derive regional shoreline change statistics later on in the workflow.
+! 1. Extract into directory with map document. Import into map document geodatabase.
+! 2. Check line. Does it fit the shoreline roughly (within ~800m)? If not, retrieve boundary from different source or draw a rough shoreline.
+! 3. Convert the boundary polygon to a polyline. 
+!     1. Feature to line
+!     2. Input = Top-level admin boundary
+!     3. Output = Geodatabase
+! 4. Use split tool to remove inland lines and save single coastal line]
+```
 
 v.	Create regions of interest (ROI) boxes along coast.
 NB: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
