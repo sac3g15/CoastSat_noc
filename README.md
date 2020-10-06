@@ -100,7 +100,45 @@ Task time = ~10 mins
     1. Edit ROIs using ‘edit vertices’ or ‘reshape’ tools.
 
 ### 3.2 Extract Coordinates
-Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane. A breakdown of the processes in the models is given in the handbook (INSERT LINK) for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
+Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane. A breakdown of the processes in the models is given in the below for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
+
+<details>
+           <summary>Model Breakdown</summary>
+           <p>‘Extract Coordinates’ - Model Breakdown
+i.	Extract coordinates of outer boundaries of the ROIs
+a.	Feature vertices to points
+b.	Input = ROIs
+c.	Point type  = All vertices
+ii.	Find XY position
+a.	Add fields (XY) (x2)
+b.	Input = ROI points
+c.	Field type = Double
+d.	Calculate geometry (right click field name)
+i.	x = x-point coordinate
+ii.	y = y-point coordinate
+iii.	Use decimal degree format
+iii.	Find max/min XY coordinates
+a.	Dissolve
+b.	Dissolve Field = Pg_no
+c.	Statistics fields
+i.	max x
+ii.	min x
+iii.	max y
+iv.	min y
+d.	Create multipart features – checked
+e.	Unsplit lines – unchecked
+iv.	Combine coordinates
+a.	Add field (‘xytext’)
+b.	Calculate field
+c.	Field name = xytext
+d.	Xytext = "([[" + str(!MAX_x!) + "," + str(!MAX_y!) + "],[" + str(!MAX_x!) + "," + str(!MIN_y!) + "],[" + str(!MIN_x!) + "," + str(!MAX_y!) + "],["  + str(!MIN_x!) + "," + str(!MIN_y!) + "]]),"
+v.	Export attribute table
+a.	Right click layer in contents panel
+b.	Export table
+c.	Save in directory as .csv
+d.	Output fields = xytext
+</p>
+         </details>
 
 1. In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
 2. Double click ‘Extract Coordinates’ to open processor
