@@ -88,15 +88,16 @@ Task time = ~10 mins
 ```
 
 5. Create regions of interest (ROI) boxes along coast.
-```diff
-!Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
-```
+
     1. Strip Map Index Features
     2. Length along line = 11km
     3. Perpendicular to the line = 2
     4. Overlap = 0
+```diff
+!Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
+```
 6. Zoom to individual ROIs to ensure that all possible shorelines are contained within the box.
-    1. Edit those using ‘edit vertices’ or ‘reshape’ tools.
+    1. Edit ROIs using ‘edit vertices’ or ‘reshape’ tools.
 
 ### 3.2 Extract Coordinates
 Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can also be run via the edit window which can be more reliable if a process fails. A breakdown of the processes in the models is below for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
