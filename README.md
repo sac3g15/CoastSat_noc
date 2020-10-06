@@ -52,8 +52,10 @@ A Jupyter Notebook combines formatted text and code. To run the code, place your
 
 ### 3. Retrieval of the satellite images - Process shoreline mapping tool
 To retrieve from the GEE server the available satellite images cropped around the user-defined region of coastline for the particular time period of interest, the following variables are required:
-Task time = ~10 mins 
+Task time = ~10 mins
+
     a.	Open Jupyter Notebook (following instructions in ‘Usage’)
+
       1.	Download ‘CoastSat-master_vSC’ and navigate to example_jupyter, copy, then rename example_jupyter.ipynb. E.g. ‘Tunisia_shoreline_2000_2020’
       2.	Edit the following variables:
     a.	`Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
