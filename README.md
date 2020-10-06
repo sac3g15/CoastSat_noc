@@ -56,7 +56,7 @@ To retrieve from the GEE server the available satellite images cropped around th
 Task time = ~10 mins
 
 1.  Open Jupyter Notebook (following instructions in ‘Usage’)
-    1. Download ‘CoastSat-master_vSC’ and navigate to example_jupyter, copy, then rename example_jupyter.ipynb. E.g. ‘Tunisia_shoreline_2000_2020’
+    1. Download ‘CoastSat-master_vSC’ and navigate to StudyArea_shoreline, copy, then rename StudyArea_shoreline.ipynb. E.g. ‘Tunisia_shoreline_2000_2020’
     2. Edit the following variables:
 2. `Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
 3. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
@@ -68,21 +68,20 @@ Task time = ~10 mins
 ### 3.1 Example of how to create a coordinate list at study site
 This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis 
 Task time = ~10 mins
-    i.	Open ArcGIS map document and save in appropriate directory
-    ii.	First, we create a coastline of the study area. (See NB below if the study area is large – e.g. Country-scale).
-    iii.	In the geodatabase, create a feature class (right-click geodatabase) and select a line feature.
-    iv.	In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
+1. Open ArcGIS map document and save in appropriate directory
+2. First, we create a coastline of the study area. (See NB below if the study area is large – e.g. Country-scale).
+3. In the geodatabase, create a feature class (right-click geodatabase) and select a line feature.
+4. In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
 
-```diff
-  ! NB. If the study site is large, you can convert administrative boundary polygons into lines from the Humanitarian Data Exchange (https://data.humdata.org/). Download the top-level (0) boundary. Download the lower-level (2) as they will be helpful to derive regional shoreline change statistics later on in the workflow.
+- ![If the study site is large, you can convert administrative boundary polygons into lines from the Humanitarian Data Exchange (https://data.humdata.org/). Download the top-level (0) boundary. Download the lower-level (2) as they will be helpful to derive regional shoreline change statistics later on in the workflow.
   1.	Extract into directory with map document. Import into map document geodatabase.
   2.	Check line. Does it fit the shoreline roughly (within ~800m)? If not, retrieve boundary from different source or draw a rough shoreline.
   3.	Convert the boundary polygon to a polyline. 
-  a.	Feature to line
-  b.	Input = Top-level admin boundary
-  c.	Output = Geodatabase
-  4.	Use split tool to remove inland lines and save single coastal line
-```
+      1. Feature to line
+      2. Input = Top-level admin boundary
+      3. Output = Geodatabase
+  4.	Use split tool to remove inland lines and save single coastal line]
+(https://via.placeholder.com/15/f03c15/000000?text=+) `#f03c15`
 
 v.	Create regions of interest (ROI) boxes along coast.
 NB: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
