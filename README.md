@@ -74,10 +74,12 @@ Task time = ~10 mins
 4. In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
 
 ```diff
-! **Note**: If the study site is large, you can convert administrative boundary polygons into lines from the Humanitarian Data Exchange (https://data.humdata.org/).
+! **Note**: If the study site is large, you can convert administrative boundary polygons into lines
+!           from the Humanitarian Data Exchange (https://data.humdata.org/).
 ! Download the top-level (0) boundary.
 ! 1. Extract into directory with map document. Import into map document geodatabase.
-! 2. Check line. Does it fit the shoreline roughly (within ~800m)? If not, retrieve boundary from different source or draw a rough shoreline.
+! 2. Check line. Does it fit the shoreline roughly (within ~800m)?
+!    If not, retrieve boundary from different source or draw a rough shoreline.
 ! 3. Convert the boundary polygon to a polyline. 
 !     1. Feature to line
 !     2. Input = Top-level admin boundary
@@ -85,8 +87,8 @@ Task time = ~10 mins
 ! 4. Use split tool to remove inland lines and save single coastal line]
 ```
 
-v.	Create regions of interest (ROI) boxes along coast.
-Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
+5. Create regions of interest (ROI) boxes along coast.
+```Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
 a.	Strip Map Index Features
 b.	Length along line = 11km
 c.	Perpendicular to the line = 2
