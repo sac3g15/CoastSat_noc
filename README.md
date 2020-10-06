@@ -68,11 +68,14 @@ Task time = ~10 mins
 ### 3.1 Example of how to create a coordinate list at study site
 This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis 
 Task time = ~10 mins
+```diff
+!Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time.
+!The use of smaller ROIs also reduces the volume of data downloaded.
+```
 1. Open ArcGIS map document and save in appropriate directory
 2. First, we create a coastline of the study area. (See Note: below if the study area is large – e.g. Country-scale).
 3. In the geodatabase, create a feature class (right-click geodatabase) and select a line feature.
 4. In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
-
 ```diff
 ! **Note**: If the study site is large, you can convert administrative boundary polygons into lines
 !           from the Humanitarian Data Exchange (https://data.humdata.org/).
@@ -86,16 +89,13 @@ Task time = ~10 mins
 !     3. Output = Geodatabase
 ! 5. Use split tool to remove inland lines and save single coastal line]
 ```
-
 5. Create regions of interest (ROI) boxes along coast.
 
     1. Strip Map Index Features
     2. Length along line = 11km
     3. Perpendicular to the line = 2
     4. Overlap = 0
-```diff
-!Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time. The use of smaller ROIs also reduces the volume of data downloaded.
-```
+
 6. Zoom to individual ROIs to ensure that all possible shorelines are contained within the box.
     1. Edit ROIs using ‘edit vertices’ or ‘reshape’ tools.
 
