@@ -103,9 +103,9 @@ Task time = ~10 mins
 Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane. A breakdown of the processes in the models is given in the below for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
 
 <details>
-           <summary>Model Breakdown</summary>
+           <summary>Model Breakdown (**Extract Coordinates**)</summary>
            <p>
-                      
+
 1.	Extract coordinates of outer boundaries of the ROIs
     1. Feature vertices to points
     2. Input = ROIs
@@ -167,23 +167,21 @@ Once the table is saved the coordinates are in a table format, but we need a lis
 ! less frequently during evenings (GMT). If this occurs:
 !   i.	Find number of folders in C:\Coastsat_master\data. E.g. Tunisia_ 27.
 !   ii.	Remove last folder (as shorelines haven’t been created for this folder). I.e. Delete Tunisia_27
-!   iii.	Cut and paste the first 26 ROIs, and place them elsewhere (I keep them in the same code and comment them out)
+!   iii. Cut and paste the first 26 ROIs, and place them elsewhere (I keep them in code and comment them out)
 !   iv.	In the For loop, change sitename to “Sitename = counter + 27 “
 !   v.	Re-run model. The model will continue to process shorelines from the previous point.
 !   vi.	Repeat this process if it occurs again. Maintain continuous file number to prevent overwrite. 
- ```
+```
 
 
-## Issues
-Having a problem? Post an issue in the [Issues page](https://github.com/kvos/coastsat/issues) (please do not email).
+## Potential Errors / Solutions
 
-## Contributing
-If you are willing to contribute, check out our todo list in the [Projects page](https://github.com/kvos/CoastSat/projects/1).
-1. Fork the repository (https://github.com/kvos/coastsat/fork).
-A fork is a copy on which you can make your changes.
-2. Create a new branch on your fork
-3. Commit your changes and push them to your branch
-4. When the branch is ready to be merged, create a Pull Request (how to make a clean pull request explained [here](https://gist.github.com/MarcDiethelm/7303312))
+    **EEException: Image.select: Parameter 'input' is required.**
+
+This error is caused by a lack of images in the Landsat/Sentinel collection for the Co-registration process, after refining the cloud cover and date (i.e. within a 2 month window) . Simply change the date into another year, or raise the maximum cloud cover % in the SDS_download file in the Coastsat folder. Change this under the function ‘Landsat_coregistration’ for the variable ‘dated’. For example, change “L8_reference = .filterDate('2017-01-01', '2018-01-01')” to “L8_reference = .filterDate('2018-01-01', '2019-01-01')” AND do the same for Sentinel-2 9 lines below.
+
+Still having a problem? Post an issue in the [Issues page](https://github.com/sac3g15/coastsat_noc/issues) (please do not email).
+
 
 ## References
 
