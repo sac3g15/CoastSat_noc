@@ -6,12 +6,10 @@ Coastsat_nocs has banched from coastsat to include the following changes:
 * Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ creates a single shoreline from all satellite images in the year 2000.
 * The user can loop through multiple study areas rather than a single polygon
 * Multiple date ranges (+ satellites) can be specified
-* A co-registration process from Landsat to Sentinel-2*
+* A co-registration process from Landsat to Sentinel-2
 * Automated shoreline editing models
 * Instructions for shoreline change rate and forecasting (10- and 20-Year) using Digital Shoreline Analysis System (DSAS) - ArcMap plug-in.
 * Landsat 5 not available in this code – working on solution
-
-*Coregistration process uses displace() and displacement() from GEE. In some areas there remains a coregistration issue which can be seen when there are large and unexpected distances between shorelines delineated between Landsat and Sentinel images. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue.
 
 The underlying approach of the CoastSat toolkit are described in detail in:
 * Vos K., Splinter K.D., Harley M.D., Simmons J.A., Turner I.L. (2019). CoastSat: a Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. *Environmental Modelling and Software*. 122, 104528. https://doi.org/10.1016/j.envsoft.2019.104528
@@ -43,6 +41,19 @@ Global shoreline change data has been created by Luijendijk et al. (2018) and is
 - Accretion Areas
 
 ![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/Coastsat_nocs_outline.png "Coastsat_nocs outline")
+
+
+## LIMITATIONS
+Landsat / Sentinel co-registration issue - Coregistration process uses displace() and displacement() from GEE. In some areas there remains a coregistration issue which can be seen when there are large and unexpected distances between shorelines delineated between Landsat and Sentinel images. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here] (#Comment on Co-registration "Goto #Comment on Co-registration")
+ 
+)
+
+Cloud persistance - In cloud presistant areas and where there are few images in the median collection in the year (count can be found in 'median_no' in output), clouds can remain in the image. Due to their spectral similarity to sand, some flase shorelines can be delineated.
+Data gaps in Landat 7 - Despite median temporal filtering, as a result as a result of the data gap in Landsat 7, some images produce broken lines along the shore. Therefore, when extracting the baseline, some areas fail to have a baseline recording. I often fill these gaps by manually filling in the next closest (time) shoreline.
+
+Locations which have undergone massive change since 2000 can also be under represented. For example, extending splits may reach beyond the 170m distance either side of the 2000 baseline. Shorelines at a local scale should be visualised to understand the evolution of change in these areas.
+Multiple shorelines in a single year can also be mapped where the algorithm identifies multiple water/sand interfaces. This can protrude in the extraction of the baseline and current (2020) shoreline used to map erosion and accretion areas. This may over-estimate the shoreline change rate. Examples can be found in complex intertidal and shallow sloping areas.
+
 
 **If you like the repo put a star on it!**
 
@@ -185,9 +196,13 @@ This will create a spreasheet of coordinates which we then need to make a list.
 
 ## Potential Errors / Solutions
 
-    **EEException: Image.select: Parameter 'input' is required.**
+    *EEException: Image.select: Parameter 'input' is required.**
 
 This error is caused by a lack of images in the Landsat/Sentinel collection for the Co-registration process, after refining the cloud cover and date (i.e. within a 2 month window) . Simply change the date into another year, or raise the maximum cloud cover % in the SDS_download file in the Coastsat folder. Change this under the function ‘Landsat_coregistration’ for the variable ‘dated’. For example, change “L8_reference = .filterDate('2017-01-01', '2018-01-01')” to “L8_reference = .filterDate('2018-01-01', '2019-01-01')” AND do the same for Sentinel-2 9 lines below.
+
+#### Comment on Co-registration ####
+
+Depedant on the loction, there can be a miss alignment (or miss registration) between L8 and S2 images, which varies geographically and can exceed 38 meters [Storey et al., 2016]. It is mainly due to the residual geolocation errors in the Landsat framework which based upon the Global Land Survey images. Despite implementing a co-registration process, there are occasionally differences between shorelines between Landsat and Sentinel-2 images. Whilst local ‘rubber sheet’ deformations were used to match images from the two satellites, further interrogation of the offset images showed that the offset images used to co-register the images greatly depends on the images used in the analysis, i.e. Offset values from a two-month period in 2016 are not similar to those produced in the same two-month period in 2017. The explanation for this different is unknown at the time of this report.  It was deemed suitable to maintaining this co-registration process despite occasional improper warping to minimise the difference between Landsat and Sentinel shorelines. A further enquiry into the processes within the function displacement and displace is needed to understand the how this is affecting the co-registration between the images. Satellite mapping of shorelines is generally accurate to 10m (ref USGS), this is indicative of the uncertainties in the processing. There are continued efforts to provide a more detailed quantification of the uncertainties within the co-registration process and median composites outside this report.
 
 Still having a problem? Post an issue in the [Issues page](https://github.com/sac3g15/coastsat_noc/issues) (please do not email).
 
@@ -198,6 +213,7 @@ Still having a problem? Post an issue in the [Issues page](https://github.com/sa
 - Kalman, R.E., 1960. A new approach to linear filtering and prediction problems.
 - Long, J.W., and Plant, N.G., 2012, Extended Kalman Filter framework for forecasting shoreline evolution: Geophysical Research Letters, v. 39, no. 13, p. 1–6.
 - Luijendijk, A., Hagenaars, G., Ranasinghe, R., Baart, F., Donchyts, G. and Aarninkhof, S., 2018. The state of the world’s beaches. Scientific reports, 8(1), pp.1-11.
+- Storey, J.; Roy, D.P.; Masek, J.; Gascon, F.; Dwyer, J.; Choate, M. A note on the temporary misregistration of Landsat-8 Operational Land Imager (OLI) and Sentinel-2 Multi Spectral Instrument (MSI) imagery. Remote Sens. Environ. 2016, 186,
 - Vos, K., Harley, M.D., Splinter, K.D., Simmons, J.A. and Turner, I.L., 2019b. Sub-annual to multi-decadal shoreline variability from publicly available satellite imagery. Coastal Engineering, 150, pp.160-174.
 - Vos, K., Splinter, K.D., Harley, M.D., Simmons, J.A. and Turner, I.L., 2019a. Coastsat: A Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. Environmental Modelling & Software, 122, p.104528.
 
