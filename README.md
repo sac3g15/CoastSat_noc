@@ -192,12 +192,10 @@ This will create a spreasheet of coordinates which we then need to make a list.
 ### 4. Clean and clip shorelines
 **Description:** The output geojson (see below) is a single line which connects all delineated shorelines and includes those created by inland or offshore features. Therefore, the raw shorelines produced by the Coastsat module need to be cleaned and clipped to the region of interest.
 
-![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/non-cleaned_shorelines.JPG = 1247x590 "Non-cleaned shorelines")
-
 #### Define Shoreline Cleaning Variables and clean shorelines ####
 Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
-Description
-Despite defining 0% overlap, the ROIs created above will have small interlocking areas between them, these need to be removed so that the shorelines processed can be clipped to prevent overlapping lines. A buffer zone is also created to remove unwanted lines away from the coast.
+
+**Description:** Despite defining 0% overlap, the ROIs created above will have small interlocking areas between them, these need to be removed so that the shorelines processed can be clipped to prevent overlapping lines. A buffer zone is also created to remove unwanted lines away from the coast.
 1. Open ArcMap/Pro Map document. In Catalog menu, under toolboxes, double click on ‘Shoreline_cleaning_presettings’
 2. Input the following:
     1. ROI filtered output = geodatabase directory > filename (e.g. ‘countryname_ROIs_filtered’)
@@ -207,7 +205,8 @@ Despite defining 0% overlap, the ROIs created above will have small interlocking
 3. Run.
 
 ```diff
-NB: Model detail deemed not necessary for outline, for model structure right click model > edit in catalog pane.
+!NB: Model detail deemed not necessary for outline,
+!for model structure right click model > edit in catalog pane.
 ```
 
 4.	Once completed, open ‘Clean Shorelines’ in the same toolbox.
@@ -220,11 +219,13 @@ NB: Model detail deemed not necessary for outline, for model structure right cli
 6.	Run.
 
 ```diff
-NB: Using ‘%Name%’ in ArcGIS modal builder prevents overwriting the files by naming each file as its original name in the ‘Coastsat-master\data’ folder.
+!NB: Using ‘%Name%’ in ArcGIS modal builder prevents overwriting the files
+!by naming each file as its original name in the ‘Coastsat-master\data’ folder.
 ```
 
 #### Further clean, extract baseline and add attributes ####
 Task time = ~15mins (dependant on size/complexity of study area)
+
 **Description:** Some erroneous shorelines remain through the presence of clouds or shadow/sun interface in mountainous regions. A manual visualisation and edit process is required, before merging all the shorelines and adding fields required for the DSAS change analysis.
 
 1.	Manually view shorelines and remove unwanted vertices from lines using the edit window. This may include deleting unwanted/cloud present lines and unwanted years by using Split or Edit Vertices in the edit toolbar. See ‘EXTRA INFORMATION (EDITING) (1)’ for illistrations of the issue.
