@@ -206,7 +206,7 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 
 ```diff
 !Note: Model detail deemed not necessary for outline,
-!    for model structure right click model > edit in catalog pane.
+!      for model structure right click model > edit in catalog pane.
 ```
 
 4.	Once completed, open ‘Clean Shorelines’ in the same toolbox.
@@ -220,7 +220,7 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 
 ```diff
 ! Note: Using ‘%Name%’ in ArcGIS modal builder prevents overwriting the files
-!     by naming each file as its original name in the ‘Coastsat-master\data’ folder.
+!       by naming each file as its original name in the ‘Coastsat-master\data’ folder.
 ```
 
 #### 4.2 Further clean, extract baseline and add attributes ####
