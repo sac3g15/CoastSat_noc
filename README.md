@@ -3,7 +3,7 @@
 CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
 
 Coastsat_nocs has banched from coastsat to include the following changes:
-* Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ creates a single shoreline from all satellite images in the year 2000.
+* Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
 * The user can loop through multiple study areas rather than a single polygon
 * Multiple date ranges (+ satellites) can be specified
 * A co-registration process from Landsat to Sentinel-2
@@ -17,6 +17,7 @@ Example applications and accuracy of the resulting satellite-derived shorelines 
 * Vos K., Harley M.D., Splinter K.D., Simmons J.A., Turner I.L. (2019). Sub-annual to multi-decadal shoreline variability from publicly available satellite imagery. *Coastal Engineering*. 150, 160–174. https://doi.org/10.1016/j.coastaleng.2019.04.004
 
 Section 2.1 and 2.2 includes direct instructions written by Vos et al. (2019). Section 2.3 includes direct references from the DSAS user guide by Himmelstoss et al. (2018).
+
 **WARNING**. The Coastsat code here has been altered, therefore the latest updates, issues and pull requests on Github may not be relevant to this workflow. The following changes have been made to the Coastsat module:
 
 ### Acknowledgements
@@ -25,11 +26,11 @@ Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repo
 
 ### Description
 
-This document provides a user guide to mapping shoreline change rates and forecast future shorelines (over a 10- and 20-year period. Example products can be viewed/downloaded via the [EO4SD data portal] (http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. 
+This document provides a user guide to mapping shoreline change rates and forecast future shorelines (over a 10- and 20-year period. Example products can be viewed/downloaded via the [EO4SD data portal](http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. 
 
 Previously, our understanding of shoreline dynamics was limited to single photogrammetry or in-situ beach sampling. Satellites have greatly enhanced our ability to measure coastal change over large areas and short periods. This has changed our approach from ground-based methods such as measuring the movement of morphological features (e.g. the edge of a cliff) or measuring the height of volume changes in the coastal zone (e.g. 3D mapping horizontal to the coast). Thanks to free, open-sourced tools by Vos et al. (2019) and Himmelstoss et al. (2018), large scale shoreline analysis can be carried out quickly. 
 
-Global shoreline change data has been created by Luijendijk et al. (2018) and is visible via the [following website](https://aqua-monitor.appspot.com/?datasets=shoreline). This uses yearly composites of satellite images dating from 1984-2016 and computed transects at 500m intervals across the world. Erosion and accretion are calculated based on a linear fit of shorelines delineated from each tile by classifying sandy beaches. This guide implements a similar methodology and exemplifies a similar output. Here, users can use up to date imagery and define their own time periods of median composites to analyse shorelines at a yearly or monthly basis. A higher resolution can be achieved using smaller intervals between transects, and future shorelines can be mapped over a 10- or 20-year period. This guide outputs the following key datasets:
+[Global shoreline change data](https://aqua-monitor.appspot.com/?datasets=shoreline) by Luijendijk et al. (2018) which uses annual composites of satellite images dating from 1984-2016 and computed transects at 500m intervals across the world. Erosion and accretion are calculated based on a linear fit of shorelines delineated from each tile by classifying sandy beaches. This guide implements a similar methodology and exemplifies a similar output. Here, users can use up to date imagery and define their own time periods of median composites to analyse shorelines at a yearly or monthly basis. A higher resolution can be achieved using smaller intervals between transects, and future shorelines can be mapped over a 10- or 20-year period. This guide outputs the following key datasets:
 
 - Shorelines at user defined time periods
 - Shoreline Change Transects - user defined intervals (here we use 50m)
@@ -46,12 +47,9 @@ Global shoreline change data has been created by Luijendijk et al. (2018) and is
 ## LIMITATIONS
 Landsat / Sentinel co-registration issue - Coregistration process uses displace() and displacement() from GEE. In some areas there remains a coregistration issue which can be seen when there are large and unexpected distances between shorelines delineated between Landsat and Sentinel images. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here](#Comment-on-Co-registration "Goto Comment-on-Co-registration")
 
-Cloud persistance - In cloud presistant areas and where there are few images in the median collection in the year (count can be found in 'median_no' in output), clouds can remain in the image. Due to their spectral similarity to sand, some flase shorelines can be delineated.
+Cloud persistance - In cloud presistant areas and where there are few images in the median collection (count can be found in 'median_no' in shoreline attribute table), clouds can remain in the image. Due to their spectral similarity to sand, some false shorelines can be delineated.
+
 Data gaps in Landat 7 - Despite median temporal filtering, as a result as a result of the data gap in Landsat 7, some images produce broken lines along the shore. Therefore, when extracting the baseline, some areas fail to have a baseline recording. I often fill these gaps by manually filling in the next closest (time) shoreline.
-
-Locations which have undergone massive change since 2000 can also be under represented. For example, extending splits may reach beyond the 170m distance either side of the 2000 baseline. Shorelines at a local scale should be visualised to understand the evolution of change in these areas.
-Multiple shorelines in a single year can also be mapped where the algorithm identifies multiple water/sand interfaces. This can protrude in the extraction of the baseline and current (2020) shoreline used to map erosion and accretion areas. This may over-estimate the shoreline change rate. Examples can be found in complex intertidal and shallow sloping areas.
-
 
 **If you like the repo put a star on it!**
 
@@ -190,6 +188,122 @@ This will create a spreasheet of coordinates which we then need to make a list.
 !   v.	Re-run model. The model will continue to process shorelines from the previous point.
 !   vi.	Repeat this process if it occurs again. Maintain continuous file number to prevent overwrite. 
 ```
+
+### 4. Clean and clip shorelines
+**Description:** The output geojson (see below) is a single line which connects all delineated shorelines and includes those created by inland or offshore features. Therefore, the raw shorelines produced by the Coastsat module need to be cleaned and clipped to the region of interest.
+
+![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/non-cleaned_shorelines.JPG "Non-cleaned shorelines")
+
+#### Define Shoreline Cleaning Variables and clean shorelines ####
+Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
+Description
+Despite defining 0% overlap, the ROIs created above will have small interlocking areas between them, these need to be removed so that the shorelines processed can be clipped to prevent overlapping lines. A buffer zone is also created to remove unwanted lines away from the coast.
+1. Open ArcMap/Pro Map document. In Catalog menu, under toolboxes, double click on ‘Shoreline_cleaning_presettings’
+2. Input the following:
+    1. ROI filtered output = geodatabase directory > filename (e.g. ‘countryname_ROIs_filtered’)
+    2. Regions of Interest = ROIs created above
+    3. Administrative Boundary Line = Country admin line
+    4. Coastal Zone = Admin Buffer
+3. Run.
+
+```diff
+NB: Model detail deemed not necessary for outline, for model structure right click model > edit in catalog pane.
+```
+
+4.	Once completed, open ‘Clean Shorelines’ in the same toolbox.
+5.	Enter the following parameters:
+    1. Iterating Folder = Folder containing geojson files (e.g. ‘C:\Documents\EO4SD\Tunisia\CoastSat-master\data’
+    2. Coordinate System = Select appropriate coordinate system by searching for the epsg code defined in the settings for shoreline processing (e.g. 26191), and select the projected coordinate system
+    3. Output file = Navigate to batch geodatabase folder and enter “%Name%_cleaned”
+    4. ROI filtered file = ROI filtered (created above)
+    5. Coastal Zone = Admin buffer (created above)
+6.	Run.
+
+```diff
+NB: Using ‘%Name%’ in ArcGIS modal builder prevents overwriting the files by naming each file as its original name in the ‘Coastsat-master\data’ folder.
+```
+
+#### Further clean, extract baseline and add attributes ####
+Task time = ~15mins (dependant on size/complexity of study area)
+**Description:** Some erroneous shorelines remain through the presence of clouds or shadow/sun interface in mountainous regions. A manual visualisation and edit process is required, before merging all the shorelines and adding fields required for the DSAS change analysis.
+
+1.	Manually view shorelines and remove unwanted vertices from lines using the edit window. This may include deleting unwanted/cloud present lines and unwanted years by using Split or Edit Vertices in the edit toolbar. See ‘EXTRA INFORMATION (EDITING) (1)’ for illistrations of the issue.
+2.	Combine all shorelines in output batch directory.
+    1. Merge
+    2. Input = shorelines E.g. ‘Tunisia_1_output_cleaned’, ‘Tunisia_2_output_cleaned’, …
+    3. Output = ‘Tunisia_shoreline_2000_2020’
+    4. Check the box Add source information to output
+3.	DSAS requires a date field formatted as mm/dd/yyyy. If using yearly composite, maintain same day and month.
+    1. Calculate field 
+    2. New field = ‘date_shrt’
+    3. Use the following expression:
+        1. If individual date (original coastsat output) use:
+        ```diff
+        Date_shrt = reclass(!date!)
+        Code Block:
+        def reclass(date):
+            yyyy = date[:-15]
+            mm = date[:-12]
+            mm2 = mm[-2:]
+            dd = date[:-9]
+            dd2 = dd[-2:]
+            return mm2 + "/" + dd2 + "/" + yyyy
+        ```
+
+ 
+If median composite use:
+Date_shrt = reclass(!date!)
+Code Block: 
+def reclass(date):
+    yyyy = str(int(date))
+    mm = "01"
+    dd = "01"
+    return mm + "/" + dd + "/" + yyyy
+
+4.	Select by attributes. Year = 2000. Find shoreline sections remaining c year 2000. Find next oldest shoreline and add to selection.
+5.	Export selected and save as baseline - ‘Tunisia_baseline_2000_2020’.
+
+2.3	Shoreline Change Statistics
+Task time = ~1.5 hrs (+1 hr processing time)
+Description
+Digital Shoreline Analysis System is a freely available software application that works within the Esri Geographic Information System (ArcGIS) software. DSAS computes rate-of-change statistics for a time series of shoreline vector data. Install the DSAS plug-in via the following link (see https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas?qt-science_center_objects=0#qt-science_center_objects).
+1.	Open ArcMap.
+2.	In the Catalog panel, connect to the map document folder with the shoreline data.
+3.	Create new personal file geodatabase by right clicking on the newly connected folder. New > personal file geodatabase. Rename ‘Shoreline Rates.mdb’
+4.	Import baseline and merged shorelines
+a.	Right click on ‘Shoreline Rates.mdb’ > Import > Multiple Feature Classes
+b.	Navigate to shoreline datasets - ‘Tunisia_baseline_2000_2020’, ‘Tunisia_shoreline_2000_2020’
+5.	DSAS plug-in requires the creation of the following fields via the attribute automator
+a.	For the baseline, add the DSAS ID field and DSAS search
+b.	Populated these fields using calculate field
+c.	DSAS ID = ObjectID
+d.	DSAS_search = 170
+I.	Cast Transects
+Task Time = 
+Description
+Here, the baseline is created by the oldest recorded shoreline delineated using satellite imagery, however a user-defined or secondary shoreline can be substituted. The 170m search limit is set here to prevent the creation of large transects in complex coastal locations such as estuaries or ports. Transects created at this stage greatly impacts the change statistics and should be interpreted carefully. Shallow sloping and frequently changing coastlines are likely to result in transects with extreme erosion or accretion rates and high errors and uncertainties.  It is highly recommended that careful visualization and editing should be carried out along in the study area. Users should look for transects which appear correctly orientated and extent to a reasonable distance between delineated shorelines. See ‘EXTRA INFORMATION (EDITING) (2)’ for illustrations of the issue.
+170 from baseline
+e.	50 spacing
+f.	500 smoothing distance
+g.	Clip transects to shoreline
+II.	Calculate Change Statistics
+1.	Set statistics (Linear regression)
+2.	Shoreline intersection threshold = no. of lines
+a.	Select all statistics
+b.	Apply shoreline intersection threshold – 6
+c.	95% confidence interval
+d.	Create report
+III.	Beta Shoreline Forecasting
+Task Time = 
+Description
+The DSAS forecast uses a Kalman filter (Kalman, 1960) to combine observed shoreline positions with model-derived positions to forecast a future shoreline position (10- or 20-year) as developed by Long and Plant (2012). The model begins at the first time-step (the date of the earliest survey) and predicts/forecasts the shoreline position for each successive time step until another shoreline observation is encountered. Whenever a shoreline observation is encountered, the Kalman Filter performs an analysis to minimize the error between the modelled and observed shoreline positions to improve the forecast, including updating the rate and uncertainties (Long and Plant, 2012). 
+NB: As noted in the DSAS user guide, the forecasts produced by this tool should be used with caution. The processes driving shoreline change are complicated and not always available as model inputs: many factors that may be important are not considered in this methodology or accounted for within the uncertainty. This methodology assumes that a linear regression thorough past shoreline positions is a good approximation for future shoreline positions; this assumption will not always be valid.
+2.4	Area Statistics
+Summary statistics are a common necessity among coastal management at both the national and local scale. The following section outlines a simply methodology to calculate areal statistics using
+Smoothing lines forecast and 2020 line – 50m PAEK
+Line to Feature – input both lines
+Buffer left side to cover all polygons to the left of the 2020 shoreline.
+
 
 
 ## Potential Errors / Solutions
