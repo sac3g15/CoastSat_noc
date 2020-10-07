@@ -205,8 +205,8 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 3. Run.
 
 ```diff
-!NB: Model detail deemed not necessary for outline,
-!for model structure right click model > edit in catalog pane.
+!Note: Model detail deemed not necessary for outline,
+!    for model structure right click model > edit in catalog pane.
 ```
 
 4.	Once completed, open ‘Clean Shorelines’ in the same toolbox.
@@ -219,8 +219,8 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 6.	Run.
 
 ```diff
-!NB: Using ‘%Name%’ in ArcGIS modal builder prevents overwriting the files
-!by naming each file as its original name in the ‘Coastsat-master\data’ folder.
+! Note: Using ‘%Name%’ in ArcGIS modal builder prevents overwriting the files
+!     by naming each file as its original name in the ‘Coastsat-master\data’ folder.
 ```
 
 #### Further clean, extract baseline and add attributes ####
@@ -250,61 +250,68 @@ Task time = ~15mins (dependant on size/complexity of study area)
             dd2 = dd[-2:]
             return mm2 + "/" + dd2 + "/" + yyyy
         ```
-
- 
-If median composite use:
-Date_shrt = reclass(!date!)
-Code Block: 
-def reclass(date):
-    yyyy = str(int(date))
-    mm = "01"
-    dd = "01"
-    return mm + "/" + dd + "/" + yyyy
-
+        2. If median composite use:
+        ```diff
+        Date_shrt = reclass(!date!)
+        Code Block:
+        def reclass(date):
+            yyyy = str(int(date))
+            mm = "01"
+            dd = "01"
+            return mm + "/" + dd + "/" + yyyy
+        ```
 4.	Select by attributes. Year = 2000. Find shoreline sections remaining c year 2000. Find next oldest shoreline and add to selection.
 5.	Export selected and save as baseline - ‘Tunisia_baseline_2000_2020’.
 
-2.3	Shoreline Change Statistics
+##	Shoreline Change Statistics (DSAS) ##
 Task time = ~1.5 hrs (+1 hr processing time)
-Description
-Digital Shoreline Analysis System is a freely available software application that works within the Esri Geographic Information System (ArcGIS) software. DSAS computes rate-of-change statistics for a time series of shoreline vector data. Install the DSAS plug-in via the following link (see https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas?qt-science_center_objects=0#qt-science_center_objects).
+
+**Description:** Digital Shoreline Analysis System is a freely available software application that works within the Esri Geographic Information System (ArcGIS) software. DSAS computes rate-of-change statistics for a time series of shoreline vector data. Install the DSAS plug-in [here](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas?qt-science_center_objects=0#qt-science_center_objects).
 1.	Open ArcMap.
 2.	In the Catalog panel, connect to the map document folder with the shoreline data.
 3.	Create new personal file geodatabase by right clicking on the newly connected folder. New > personal file geodatabase. Rename ‘Shoreline Rates.mdb’
 4.	Import baseline and merged shorelines
-a.	Right click on ‘Shoreline Rates.mdb’ > Import > Multiple Feature Classes
-b.	Navigate to shoreline datasets - ‘Tunisia_baseline_2000_2020’, ‘Tunisia_shoreline_2000_2020’
+    1. Right click on ‘Shoreline Rates.mdb’ > Import > Multiple Feature Classes
+    2. Navigate to shoreline datasets - ‘Tunisia_baseline_2000_2020’, ‘Tunisia_shoreline_2000_2020’
 5.	DSAS plug-in requires the creation of the following fields via the attribute automator
-a.	For the baseline, add the DSAS ID field and DSAS search
-b.	Populated these fields using calculate field
-c.	DSAS ID = ObjectID
-d.	DSAS_search = 170
-I.	Cast Transects
+    1. For the baseline, add the DSAS ID field and DSAS search
+    2. Populated these fields using calculate field
+    3. DSAS ID = ObjectID
+    4. DSAS_search = 170
+
+### Cast Transects ###
 Task Time = 
-Description
-Here, the baseline is created by the oldest recorded shoreline delineated using satellite imagery, however a user-defined or secondary shoreline can be substituted. The 170m search limit is set here to prevent the creation of large transects in complex coastal locations such as estuaries or ports. Transects created at this stage greatly impacts the change statistics and should be interpreted carefully. Shallow sloping and frequently changing coastlines are likely to result in transects with extreme erosion or accretion rates and high errors and uncertainties.  It is highly recommended that careful visualization and editing should be carried out along in the study area. Users should look for transects which appear correctly orientated and extent to a reasonable distance between delineated shorelines. See ‘EXTRA INFORMATION (EDITING) (2)’ for illustrations of the issue.
-170 from baseline
-e.	50 spacing
-f.	500 smoothing distance
-g.	Clip transects to shoreline
-II.	Calculate Change Statistics
+**Description:** Here, the baseline is created by the oldest recorded shoreline delineated using satellite imagery, however a user-defined or secondary shoreline can be substituted. The 170m search limit is set here to prevent the creation of large transects in complex coastal locations such as estuaries or ports. Transects created at this stage greatly impacts the change statistics and should be interpreted carefully. Shallow sloping and frequently changing coastlines are likely to result in transects with extreme erosion or accretion rates and high errors and uncertainties.  It is highly recommended that careful visualization and editing should be carried out along in the study area. Users should look for transects which appear correctly orientated and extent to a reasonable distance between delineated shorelines.
+1. Input the following
+    1. 170 from baseline
+    2. 50 spacing
+    3. 500 smoothing distance
+    4. Check box - Clip transects to shoreline
+
+### Calculate Change Statistics ###
 1.	Set statistics (Linear regression)
 2.	Shoreline intersection threshold = no. of lines
-a.	Select all statistics
-b.	Apply shoreline intersection threshold – 6
-c.	95% confidence interval
-d.	Create report
-III.	Beta Shoreline Forecasting
-Task Time = 
-Description
-The DSAS forecast uses a Kalman filter (Kalman, 1960) to combine observed shoreline positions with model-derived positions to forecast a future shoreline position (10- or 20-year) as developed by Long and Plant (2012). The model begins at the first time-step (the date of the earliest survey) and predicts/forecasts the shoreline position for each successive time step until another shoreline observation is encountered. Whenever a shoreline observation is encountered, the Kalman Filter performs an analysis to minimize the error between the modelled and observed shoreline positions to improve the forecast, including updating the rate and uncertainties (Long and Plant, 2012). 
-NB: As noted in the DSAS user guide, the forecasts produced by this tool should be used with caution. The processes driving shoreline change are complicated and not always available as model inputs: many factors that may be important are not considered in this methodology or accounted for within the uncertainty. This methodology assumes that a linear regression thorough past shoreline positions is a good approximation for future shoreline positions; this assumption will not always be valid.
-2.4	Area Statistics
+    1. Select all statistics
+    2. Apply shoreline intersection threshold – 6
+    3. 95% confidence interval
+    4. Create report
+
+### Beta Shoreline Forecasting ###
+**Description:** The DSAS forecast uses a Kalman filter (Kalman, 1960) to combine observed shoreline positions with model-derived positions to forecast a future shoreline position (10- or 20-year) as developed by Long and Plant (2012). The model begins at the first time-step (the date of the earliest survey) and predicts/forecasts the shoreline position for each successive time step until another shoreline observation is encountered. Whenever a shoreline observation is encountered, the Kalman Filter performs an analysis to minimize the error between the modelled and observed shoreline positions to improve the forecast, including updating the rate and uncertainties (Long and Plant, 2012). 
+
+```diff
+! NB: As noted in the DSAS user guide, the forecasts produced by this tool should be used with caution.
+!     The processes driving shoreline change are complicated and not always available as model inputs.
+!     Many factors that may be important are not considered in this methodology or accounted for within
+!     the uncertainty. This methodology assumes that a linear regression thorough past shoreline positions
+!     is a good approximation for future shoreline positions; this assumption will not always be valid.
+```
+
+### Area Statistics ###
 Summary statistics are a common necessity among coastal management at both the national and local scale. The following section outlines a simply methodology to calculate areal statistics using
 Smoothing lines forecast and 2020 line – 50m PAEK
 Line to Feature – input both lines
 Buffer left side to cover all polygons to the left of the 2020 shoreline.
-
 
 
 ## Potential Errors / Solutions
