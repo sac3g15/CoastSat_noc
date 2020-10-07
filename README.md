@@ -21,17 +21,28 @@ Example applications and accuracy of the resulting satellite-derived shorelines 
 Section 2.1 and 2.2 includes direct instructions written by Vos et al. (2019). Section 2.3 includes direct references from the DSAS user guide by Himmelstoss et al. (2018).
 **WARNING**. The Coastsat code here has been altered, therefore the latest updates, issues and pull requests on Github may not be relevant to this workflow. The following changes have been made to the Coastsat module:
 
+### Acknowledgements
+Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repository. Also, thanks to USGS for providing the open-sourced Digital Shoreline Analysis System plug-in. Both provide the basis for this workflow which would not exist without it. 
+
 
 ### Description
 
-Satellite remote sensing can provide low-cost long-term shoreline data capable of resolving the temporal scales of interest to coastal scientists and engineers at sites where no in-situ field measurements are available. CoastSat_noc enables the non-expert user to extract shorelines from Landsat 7, Landsat 8 and Sentinel-2 images.
-The shoreline detection algorithm implemented in CoastSat is optimised for sandy beach coastlines.   It combines a sub-pixel border segmentation and an image classification component, which refines the segmentation into four distinct categories such that the shoreline detection is specific to the sand/water interface.
+This document provides a user guide to mapping shoreline change rates and forecast future shorelines (over a 10- and 20-year period. Example products can be viewed/downloaded via the [EO4SD data portal] (http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. 
 
-The toolbox has three main functionalities:
-- assisted retrieval from Google Earth Engine of all available satellite images spanning the user-defined region of interest and time period
-- automated extraction of shorelines from all the selected images using a sub-pixel resolution technique
-- intersection of the 2D shorelines with user-defined shore-normal transects
+Previously, our understanding of shoreline dynamics was limited to single photogrammetry or in-situ beach sampling. Satellites have greatly enhanced our ability to measure coastal change over large areas and short periods. This has changed our approach from ground-based methods such as measuring the movement of morphological features (e.g. the edge of a cliff) or measuring the height of volume changes in the coastal zone (e.g. 3D mapping horizontal to the coast). Thanks to free, open-sourced tools by Vos et al. (2019) and Himmelstoss et al. (2018), large scale shoreline analysis can be carried out quickly. 
 
+Global shoreline change data has been created by Luijendijk et al. (2018) and is visible via the [following website] (https://aqua-monitor.appspot.com/?datasets=shoreline). This uses yearly composites of satellite images dating from 1984-2016 and computed transects at 500m intervals across the world. Erosion and accretion are calculated based on a linear fit of shorelines delineated from each tile by classifying sandy beaches. This guide implements a similar methodology and exemplifies a similar output. Here, users can use up to date imagery and define their own time periods of median composites to analyse shorelines at a yearly or monthly basis. A higher resolution can be achieved using smaller intervals between transects, and future shorelines can be mapped over a 10- or 20-year period. This guide outputs the following key datasets:
+
+- Shorelines at user defined time periods
+- Shoreline Change Transects - user defined intervals (here we use 50m)
+- 10-year Forecast shoreline
+- 10-year Forecast shoreline Uncertainty 
+- 20-year Forecast shoreline
+- 20-year Forecast shoreline Uncertainty
+- Erosion Areas
+- Accretion Areas
+
+![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/Coastsat_nocs_outline.png "Coastsat_nocs outline")
 
 **If you like the repo put a star on it!**
 
@@ -146,7 +157,7 @@ Once the ROIs have been established, we need to extract the coordinates to a lis
 
 This will create a spreasheet of coordinates which we then need to make a list.
 1. Open in excel. Delete Column OBJECTID and top row, then click save
-2. Re-open the saved file in a text editor (notepad/notepad++)
+2. Re-open the saved file in a text editor (e.g. notepad/notepad++)
 3. Find and Replace.
 4. Find ‘ ” ’. Replace ‘ ‘.
 5. Find ‘ ]]), ’. Replace ‘ ]]),\ ‘.
