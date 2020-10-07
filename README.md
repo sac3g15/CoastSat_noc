@@ -98,10 +98,10 @@ Task time = ~10 mins
     1. Edit ROIs using ‘edit vertices’ or ‘reshape’ tools.
 
 ### 3.2 Extract Coordinates
-Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane. A breakdown of the processes in the models is given in the below for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
+Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane. A breakdown of the processes in the models is given in the below for clarity, understanding and scrutiny, with the hope to make this process full open sourced (i.e. no ArcGIS) in the future.
 
 <details>
-           <summary>Model Breakdown (__Extract Coordinates__)</summary>
+           <summary>Model Breakdown - Extract Coordinates</summary>
            <p>
 
 1.	Extract coordinates of outer boundaries of the ROIs
@@ -144,13 +144,13 @@ Once the ROIs have been established, we need to extract the coordinates to a lis
 3. Input ROIs and the output location folder (e.g. ‘CoastSat-master_vSC’)
 4. Run.
 
-Once the table is saved the coordinates are in a table format, but we need a list…
-5. Open in excel. Delete Column OBJECTID and top row, then click save
-6. Re-open the saved file in a text editor (notepad/notepad++)
-7. Find and Replace.
-8. Find ‘ ” ’. Replace ‘ ‘.
-9. Find ‘ ]]), ’. Replace ‘ ]]),\ ‘.
-10. Remove \ symbol on the last coordinate
+This will create a spreasheet of coordinates which we then need to make a list.
+1. Open in excel. Delete Column OBJECTID and top row, then click save
+2. Re-open the saved file in a text editor (notepad/notepad++)
+3. Find and Replace.
+4. Find ‘ ” ’. Replace ‘ ‘.
+5. Find ‘ ]]), ’. Replace ‘ ]]),\ ‘.
+6. Remove \ symbol on the last coordinate
 
 ### 3.3	Begin processing
 1. Open Jupyter Notebook (following instructions in ‘Usage’) if not already open and navigate to `StudyArea_shoreline.ipyNote:`
