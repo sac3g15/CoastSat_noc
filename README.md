@@ -97,7 +97,7 @@ Task time = ~10 mins
 !           from the Humanitarian Data Exchange (https://data.humdata.org/).
 ! 1. Download the top-level (0) boundary.
 ! 2. Extract into directory with map document. Import into map document geodatabase.
-! 4. Check line. Does it fit the shoreline roughly (within ~800m)?
+! 3. Check line. Does it fit the shoreline roughly (within ~800m)?
 !    If not, retrieve boundary from different source or draw a rough shoreline.
 ! 4. Convert the boundary polygon to a polyline. 
 !     1. Feature to line
