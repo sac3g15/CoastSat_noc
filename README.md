@@ -44,7 +44,7 @@ Global shoreline change data has been created by Luijendijk et al. (2018) and is
 
 
 ## LIMITATIONS
-Landsat / Sentinel co-registration issue - Coregistration process uses displace() and displacement() from GEE. In some areas there remains a coregistration issue which can be seen when there are large and unexpected distances between shorelines delineated between Landsat and Sentinel images. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here](#Comment on Co-registration "Goto #Comment on Co-registration")
+Landsat / Sentinel co-registration issue - Coregistration process uses displace() and displacement() from GEE. In some areas there remains a coregistration issue which can be seen when there are large and unexpected distances between shorelines delineated between Landsat and Sentinel images. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here](#Comment-on-Co-registration "Goto Comment-on-Co-registration")
 
 Cloud persistance - In cloud presistant areas and where there are few images in the median collection in the year (count can be found in 'median_no' in output), clouds can remain in the image. Due to their spectral similarity to sand, some flase shorelines can be delineated.
 Data gaps in Landat 7 - Despite median temporal filtering, as a result as a result of the data gap in Landsat 7, some images produce broken lines along the shore. Therefore, when extracting the baseline, some areas fail to have a baseline recording. I often fill these gaps by manually filling in the next closest (time) shoreline.
