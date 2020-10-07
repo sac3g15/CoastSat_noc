@@ -1,6 +1,6 @@
 # CoastSat_nocs
 
-CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain time-series of shoreline position at any coastline worldwide from 30+ years (and growing) of Landsat 7, 8 and Sentinel-2. This is a toolkit which has been developed by Vos et al., 2019 originally named Coastsat found here (https://github.com/kvos/CoastSat).
+CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an open sourced code by Vos et al., 2019 (https://github.com/kvos/CoastSat) and uses DSAS shoreline analysis plug-in in ArcMap.
 
 Coastsat_nocs has banched from coastsat to include the following changes:
 * Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ creates a single shoreline from all satellite images in the year 2000.
@@ -36,7 +36,7 @@ The toolbox has three main functionalities:
 **If you like the repo put a star on it!**
 
 ## 1. Installation
-To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in the main [CoastSat toolbox] (https://github.com/kvos/CoastSat)).
+To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in section 1 from the [`CoastSat toolbox`] (https://github.com/kvos/CoastSat)).
 
 ## 2. Usage
 
@@ -51,19 +51,17 @@ A web browser window will open. Point to the directory where you downloaded this
 A Jupyter Notebook combines formatted text and code. To run the code, place your cursor inside one of the code sections and click on the `run cell` button and progress forward.
 
 ### 3. Retrieval of the satellite images - Process shoreline mapping tool
-To retrieve from the GEE server the available satellite images cropped around the user-defined region of coastline for the particular time period of interest, the following variables are required:
+The jupyter notebook is where you can customise the processing to your needs - i.e. boundaries of study area and time, the following variables are required:
 
 Task time = ~10 mins
-
-1.  Open Jupyter Notebook (following instructions in ‘Usage’)
-    1. Download ‘CoastSat-master_vSC’ and navigate to StudyArea_shoreline, copy, then rename StudyArea_shoreline.ipyNote:. E.g. ‘Tunisia_shoreline_2000_2020’
-    2. Edit the following variables:
-2. `Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
-3. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
-4. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections)
-5. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
-6. `Settings`
+1. `Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
+2. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
+3. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections)
+4. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
+5. `Settings`
     1. `Output_epsg` = Country-specific coordinate system (see https://epsg.io/)
+
+There are additional parameters (`min_beach_size`, `buffer_size`, `min_length_sl`, `cloud_mask_issue` and `sand_color`) that can be tuned to optimise the shoreline detection in a specific area.
 
 ### 3.1 Example of how to create a coordinate list at study site
 This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis 
@@ -103,7 +101,7 @@ Task time = ~10 mins
 Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane. A breakdown of the processes in the models is given in the below for clarity, understanding and scrutiny, with the hope to make this process full open sourced in the future.
 
 <details>
-           <summary>Model Breakdown (**Extract Coordinates**)</summary>
+           <summary>Model Breakdown (__Extract Coordinates__)</summary>
            <p>
 
 1.	Extract coordinates of outer boundaries of the ROIs
