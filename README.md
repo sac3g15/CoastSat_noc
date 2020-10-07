@@ -1,6 +1,6 @@
 # CoastSat_nocs
 
-CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an open sourced code by Vos et al., 2019 (https://github.com/kvos/CoastSat) and uses DSAS shoreline analysis plug-in in ArcMap.
+CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
 
 Coastsat_nocs has banched from coastsat to include the following changes:
 * Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ creates a single shoreline from all satellite images in the year 2000.
@@ -56,7 +56,7 @@ Multiple shorelines in a single year can also be mapped where the algorithm iden
 **If you like the repo put a star on it!**
 
 ## 1. Installation
-To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in section 1 from the [`CoastSat toolbox`] (https://github.com/kvos/CoastSat)).
+To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in section 1 from the [`CoastSat toolbox`](https://github.com/kvos/CoastSat)).
 
 ## 2. Usage
 
