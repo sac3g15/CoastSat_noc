@@ -192,7 +192,7 @@ This will create a spreasheet of coordinates which we then need to make a list.
 ### 4. Clean and clip shorelines
 **Description:** The output geojson (see below) is a single line which connects all delineated shorelines and includes those created by inland or offshore features. Therefore, the raw shorelines produced by the Coastsat module need to be cleaned and clipped to the region of interest.
 
-![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/non-cleaned_shorelines.JPG "Non-cleaned shorelines")
+![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/non-cleaned_shorelines.JPG/400x300 "Non-cleaned shorelines")
 
 #### Define Shoreline Cleaning Variables and clean shorelines ####
 Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
