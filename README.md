@@ -54,7 +54,7 @@ Data gaps in Landat 7 - Despite median temporal filtering, as a result as a resu
 **If you like the repo put a star on it!**
 
 ## 1. Installation
-To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in section 1 from the [`CoastSat toolbox`](https://github.com/kvos/CoastSat)).
+To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in section 1 from the [CoastSat toolbox](https://github.com/kvos/CoastSat)).
 
 ## 2. Usage
 
@@ -85,15 +85,15 @@ There are additional parameters (`min_beach_size`, `buffer_size`, `min_length_sl
 This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis 
 Task time = ~10 mins
 ```diff
-!Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time.
-!The use of smaller ROIs also reduces the volume of data downloaded.
+! Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time.
+! The use of smaller ROIs also reduces the volume of data downloaded.
 ```
 1. Open ArcGIS map document and save in appropriate directory
 2. First, we create a coastline of the study area. (See below if the study area is large – e.g. Country-scale).
 3. In the geodatabase, create a feature class (right-click geodatabase) and select a line feature.
 4. In the Edit window, select ‘create features’ and draw a coastline in the region of interest.
 ```diff
-! **Note**: If the study site is large, you can convert administrative boundary polygons into lines
+! Note: If the study site is large, you can convert administrative boundary polygons into lines
 !           from the Humanitarian Data Exchange (https://data.humdata.org/).
 ! 1. Download the top-level (0) boundary.
 ! 2. Extract into directory with map document. Import into map document geodatabase.
@@ -183,7 +183,7 @@ This will create a spreasheet of coordinates which we then need to make a list.
 ! less frequently during evenings (GMT). If this occurs:
 !   i.	Find number of folders in C:\Coastsat_master\data. E.g. Tunisia_ 27.
 !   ii.	Remove last folder (as shorelines haven’t been created for this folder). I.e. Delete Tunisia_27
-!   iii. Cut and paste the first 26 ROIs, and place them elsewhere (I keep them in code and comment them out)
+!   iii. Cut and paste the first 26 ROIs. I keep them in code and comment them out
 !   iv.	In the For loop, change sitename to “Sitename = counter + 27 “
 !   v.	Re-run model. The model will continue to process shorelines from the previous point.
 !   vi.	Repeat this process if it occurs again. Maintain continuous file number to prevent overwrite. 
@@ -192,7 +192,7 @@ This will create a spreasheet of coordinates which we then need to make a list.
 ### 4. Clean and clip shorelines
 **Description:** The output geojson (see below) is a single line which connects all delineated shorelines and includes those created by inland or offshore features. Therefore, the raw shorelines produced by the Coastsat module need to be cleaned and clipped to the region of interest.
 
-#### Define Shoreline Cleaning Variables and clean shorelines ####
+#### 4.1 Define Shoreline Cleaning Variables and clean shorelines ####
 Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 
 **Description:** Despite defining 0% overlap, the ROIs created above will have small interlocking areas between them, these need to be removed so that the shorelines processed can be clipped to prevent overlapping lines. A buffer zone is also created to remove unwanted lines away from the coast.
@@ -223,7 +223,7 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 !     by naming each file as its original name in the ‘Coastsat-master\data’ folder.
 ```
 
-#### Further clean, extract baseline and add attributes ####
+#### 4.2 Further clean, extract baseline and add attributes ####
 Task time = ~15mins (dependant on size/complexity of study area)
 
 **Description:** Some erroneous shorelines remain through the presence of clouds or shadow/sun interface in mountainous regions. A manual visualisation and edit process is required, before merging all the shorelines and adding fields required for the DSAS change analysis.
@@ -263,7 +263,7 @@ Task time = ~15mins (dependant on size/complexity of study area)
 4.	Select by attributes. Year = 2000. Find shoreline sections remaining c year 2000. Find next oldest shoreline and add to selection.
 5.	Export selected and save as baseline - ‘Tunisia_baseline_2000_2020’.
 
-##	Shoreline Change Statistics (DSAS) ##
+##	5. Shoreline Change Statistics (DSAS) ##
 Task time = ~1.5 hrs (+1 hr processing time)
 
 **Description:** Digital Shoreline Analysis System is a freely available software application that works within the Esri Geographic Information System (ArcGIS) software. DSAS computes rate-of-change statistics for a time series of shoreline vector data. Install the DSAS plug-in [here](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas?qt-science_center_objects=0#qt-science_center_objects).
@@ -279,7 +279,7 @@ Task time = ~1.5 hrs (+1 hr processing time)
     3. DSAS ID = ObjectID
     4. DSAS_search = 170
 
-### Cast Transects ###
+### 5.1 Cast Transects ###
 Task Time = 
 **Description:** Here, the baseline is created by the oldest recorded shoreline delineated using satellite imagery, however a user-defined or secondary shoreline can be substituted. The 170m search limit is set here to prevent the creation of large transects in complex coastal locations such as estuaries or ports. Transects created at this stage greatly impacts the change statistics and should be interpreted carefully. Shallow sloping and frequently changing coastlines are likely to result in transects with extreme erosion or accretion rates and high errors and uncertainties.  It is highly recommended that careful visualization and editing should be carried out along in the study area. Users should look for transects which appear correctly orientated and extent to a reasonable distance between delineated shorelines.
 1. Input the following
@@ -288,7 +288,7 @@ Task Time =
     3. 500 smoothing distance
     4. Check box - Clip transects to shoreline
 
-### Calculate Change Statistics ###
+### 5.2 Calculate Change Statistics ###
 1.	Set statistics (Linear regression)
 2.	Shoreline intersection threshold = no. of lines
     1. Select all statistics
@@ -296,7 +296,7 @@ Task Time =
     3. 95% confidence interval
     4. Create report
 
-### Beta Shoreline Forecasting ###
+### 5.3 Beta Shoreline Forecasting ###
 **Description:** The DSAS forecast uses a Kalman filter (Kalman, 1960) to combine observed shoreline positions with model-derived positions to forecast a future shoreline position (10- or 20-year) as developed by Long and Plant (2012). The model begins at the first time-step (the date of the earliest survey) and predicts/forecasts the shoreline position for each successive time step until another shoreline observation is encountered. Whenever a shoreline observation is encountered, the Kalman Filter performs an analysis to minimize the error between the modelled and observed shoreline positions to improve the forecast, including updating the rate and uncertainties (Long and Plant, 2012). 
 
 ```diff
@@ -307,7 +307,7 @@ Task Time =
 !     is a good approximation for future shoreline positions; this assumption will not always be valid.
 ```
 
-### Area Statistics ###
+### 5.4 Area Statistics ###
 Summary statistics are a common necessity among coastal management at both the national and local scale. The following section outlines a simply methodology to calculate areal statistics using
 Smoothing lines forecast and 2020 line – 50m PAEK
 Line to Feature – input both lines
