@@ -6,8 +6,8 @@ Coastsat_nocs has banched from coastsat to include the following changes:
 * Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
 * The user can loop through multiple study areas rather than a single polygon
 * Multiple date ranges (+ satellites) can be specified
-* A co-registration process from Landsat to Sentinel-2
-* Automated shoreline editing models
+* A co-registration process to align Landsat to Sentinel-2
+* Automated shoreline cleaning models
 * Instructions for shoreline change rate and forecasting (10- and 20-Year) using Digital Shoreline Analysis System (DSAS) - ArcMap plug-in.
 * Landsat 5 not available in this code – working on solution
 
@@ -16,9 +16,9 @@ The underlying approach of the CoastSat toolkit are described in detail in:
 Example applications and accuracy of the resulting satellite-derived shorelines are discussed in:
 * Vos K., Harley M.D., Splinter K.D., Simmons J.A., Turner I.L. (2019). Sub-annual to multi-decadal shoreline variability from publicly available satellite imagery. *Coastal Engineering*. 150, 160–174. https://doi.org/10.1016/j.coastaleng.2019.04.004
 
-Section 2.1 and 2.2 includes direct instructions written by Vos et al. (2019). Section 2.3 includes direct references from the DSAS user guide by Himmelstoss et al. (2018).
+Section 2 includes instructions written by Vos et al. (2019). Section 5 includes direct references from the DSAS user guide by Himmelstoss et al. (2018).
 
-**WARNING**. The Coastsat code here has been altered, therefore the latest updates, issues and pull requests on Github may not be relevant to this workflow. The following changes have been made to the Coastsat module:
+**WARNING**. The Coastsat code here has been altered, therefore the latest updates, issues and pull requests on Github may not be relevant to this workflow.
 
 ### Acknowledgements
 Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repository. Also, thanks to USGS for providing the open-sourced Digital Shoreline Analysis System plug-in. Both provide the basis for this workflow which would not exist without it. 
@@ -51,10 +51,9 @@ Cloud persistance - In cloud presistant areas and where there are few images in 
 
 Data gaps in Landat 7 - Despite median temporal filtering, as a result as a result of the data gap in Landsat 7, some images produce broken lines along the shore. Therefore, when extracting the baseline, some areas fail to have a baseline recording. I often fill these gaps by manually filling in the next closest (time) shoreline.
 
-**If you like the repo put a star on it!**
 
 ## 1. Installation
-To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in section 1 from the [CoastSat toolbox](https://github.com/kvos/CoastSat)).
+To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in section 1 from the [CoastSat toolbox](https://github.com/kvos/CoastSat#1-installation)).
 
 ## 2. Usage
 
@@ -71,10 +70,14 @@ A Jupyter Notebook combines formatted text and code. To run the code, place your
 ### 3. Retrieval of the satellite images - Process shoreline mapping tool
 The jupyter notebook is where you can customise the processing to your needs - i.e. boundaries of study area and time, the following variables are required:
 
-Task time = ~10 mins
 1. `Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
 2. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
-3. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections)
+3. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections).
+
+        FYI.Landsat 7 = 1999 - Present
+            Landsat 8 = 2013 - Present
+            Sentinel 2 = 2015-06-23 – Present
+
 4. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
 5. `Settings`
     1. `Output_epsg` = Country-specific coordinate system (see https://epsg.io/)
@@ -83,7 +86,7 @@ There are additional parameters (`min_beach_size`, `buffer_size`, `min_length_sl
 
 ### 3.1 Example of how to create a coordinate list at study site
 This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis 
-Task time = ~10 mins
+
 ```diff
 ! Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time.
 ! The use of smaller ROIs also reduces the volume of data downloaded.
@@ -188,6 +191,7 @@ This will create a spreasheet of coordinates which we then need to make a list.
 !   v.	Re-run model. The model will continue to process shorelines from the previous point.
 !   vi.	Repeat this process if it occurs again. Maintain continuous file number to prevent overwrite. 
 ```
+**If you like the repo put a star on it!**
 
 ### 4. Clean and clip shorelines
 **Description:** The output geojson (see below) is a single line which connects all delineated shorelines and includes those created by inland or offshore features. Therefore, the raw shorelines produced by the Coastsat module need to be cleaned and clipped to the region of interest.
