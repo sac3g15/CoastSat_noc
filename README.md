@@ -74,9 +74,9 @@ The jupyter notebook is where you can customise the processing to your needs - i
 2. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
 3. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections).
 
-        FYI.Landsat 7 = 1999 - Present
-            Landsat 8 = 2013 - Present
-            Sentinel 2 = 2015-06-23 – Present
+        FYI.    Landsat 7 = January 1999 - Present
+                Landsat 8 = April 2013 - Present
+                Sentinel 2 = 2015-06-23 – Present
 
 4. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
 5. `Settings`
