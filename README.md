@@ -119,7 +119,13 @@ This section demonstrates a simple way to create a coordinate list of a study ar
     1. Edit ROIs using ‘edit vertices’ or ‘reshape’ tools.
 
 ### 3.2 Extract Coordinates
-Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane. A breakdown of the processes in the models is given in the below for clarity, understanding and scrutiny, with the hope to make this process full open sourced (i.e. no ArcGIS) in the future.
+Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane.
+
+#### Refining ROI regions and creating buffer zone for clipping
+*NEED TO FINISH* 
+
+
+A breakdown of the processes in the models is given in the below for clarity, understanding and scrutiny, with the hope to make this process full open sourced (i.e. no ArcGIS) in the future.
 
 <details>
            <summary>Model Breakdown - Extract Coordinates</summary>
