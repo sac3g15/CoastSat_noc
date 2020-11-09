@@ -129,7 +129,7 @@ Once the ROIs have been established, we need to extract the coordinates to a lis
 
 1. In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
 2. Double click ‘Extract Coordinates’ to open processor
-3. Input ROIs and the output location folder (e.g. ‘CoastSat-master_vSC’)
+3. Input ROI created above, and select the output location folder (e.g. ‘CoastSat-master_vSC’) - this is where a spreadsheet of coordinates will be created, therefore is has to be located in a folder rather than within a geodatabase
 4. Run.
 
 This will create a spreasheet of coordinates which we then need to make a list.
@@ -200,7 +200,6 @@ A breakdown of the processes in the models is given in the below for clarity, un
 !   v.	Re-run model. The model will continue to process shorelines from the previous point.
 !   vi.	Repeat this process if it occurs again. Maintain continuous file number to prevent overwrite. 
 ```
-**If you like the repo put a star on it!**
 
 ### 4. Clean and clip shorelines
 **Description:** The output geojson (see below) is a single line which connects all delineated shorelines and includes those created by inland or offshore features. Therefore, the raw shorelines produced by the Coastsat module need to be cleaned and clipped to the region of interest.
@@ -208,7 +207,7 @@ A breakdown of the processes in the models is given in the below for clarity, un
 #### 4.1 Define Shoreline Cleaning Variables and clean shorelines ####
 Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 
-**Description:** Despite defining 0% overlap, the ROIs created above will have small interlocking areas between them, these need to be removed so that the shorelines processed can be clipped to prevent overlapping lines. A buffer zone is also created to remove unwanted lines away from the coast.
+**Description:** Despite defining 0% overlap, the ROIs created above will have small interlocking areas between them, these need to be removed so that the shorelines processed can be clipped to prevent overlapping lines. A buffer zone is also created to remove unwanted lines away from the coast. These processes are completed within the second ArcGIS model ‘Shoreline_cleaning_presettings’.
 1. Open ArcMap/Pro Map document. In Catalog menu, under toolboxes, double click on ‘Shoreline_cleaning_presettings’
 2. Input the following:
     1. ROI filtered output = geodatabase directory > filename (e.g. ‘countryname_ROIs_filtered’)
@@ -218,11 +217,11 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 3. Run.
 
 ```diff
-!Note: Model detail deemed not necessary for outline,
-!      for model structure right click model > edit in catalog pane.
+!   Note: Model detail deemed not necessary for outline,
+!         for model structure right click model > edit in catalog pane.
 ```
 
-4.	Once completed, open ‘Clean Shorelines’ in the same toolbox.
+4.	Once completed, open ‘Clean Shorelines’ in the same toolbox, this uses the two feature classes just created to refine the shoreline within the third model.
 5.	Enter the following parameters:
     1. Iterating Folder = Folder containing geojson files (e.g. ‘C:\Documents\EO4SD\Tunisia\CoastSat-master\data’
     2. Coordinate System = Select appropriate coordinate system by searching for the epsg code defined in the settings for shoreline processing (e.g. 26191), and select the projected coordinate system
@@ -235,13 +234,14 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
 ! Note: Using ‘%Name%’ in ArcGIS modal builder prevents overwriting the files
 !       by naming each file as its original name in the ‘Coastsat-master\data’ folder.
 ```
+**If you like the repo put a star on it!**
 
 #### 4.2 Further clean, extract baseline and add attributes ####
 Task time = ~15mins (dependant on size/complexity of study area)
 
-**Description:** Some erroneous shorelines remain through the presence of clouds or shadow/sun interface in mountainous regions. A manual visualisation and edit process is required, before merging all the shorelines and adding fields required for the DSAS change analysis.
+**Description:** Some erroneous shorelines remain through the presence of clouds, the shadow/sun interface in mountainous regions or inland waters and rivers. A manual visualisation and edit process is required, before merging all the shorelines and adding fields required for the DSAS change analysis.
 
-1.	Manually view shorelines and remove unwanted vertices from lines using the edit window. This may include deleting unwanted/cloud present lines and unwanted years by using Split or Edit Vertices in the edit toolbar. See ‘EXTRA INFORMATION (EDITING) (1)’ for illistrations of the issue.
+1.	Manually view shorelines and remove unwanted vertices from lines using the edit window. This may include deleting unwanted/cloud present lines and unwanted years by using Split or Edit Vertices in the edit toolbar.
 2.	Combine all shorelines in output batch directory.
     1. Merge
     2. Input = shorelines E.g. ‘Tunisia_1_output_cleaned’, ‘Tunisia_2_output_cleaned’, …
@@ -349,4 +349,5 @@ Still having a problem? Post an issue in the [Issues page](https://github.com/sa
 - Storey, J.; Roy, D.P.; Masek, J.; Gascon, F.; Dwyer, J.; Choate, M. A note on the temporary misregistration of Landsat-8 Operational Land Imager (OLI) and Sentinel-2 Multi Spectral Instrument (MSI) imagery. Remote Sens. Environ. 2016, 186,
 - Vos, K., Harley, M.D., Splinter, K.D., Simmons, J.A. and Turner, I.L., 2019b. Sub-annual to multi-decadal shoreline variability from publicly available satellite imagery. Coastal Engineering, 150, pp.160-174.
 - Vos, K., Splinter, K.D., Harley, M.D., Simmons, J.A. and Turner, I.L., 2019a. Coastsat: A Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. Environmental Modelling & Software, 122, p.104528.
+
 
