@@ -118,7 +118,10 @@ This section demonstrates a simple way to create a coordinate list of a study ar
 6. Zoom to individual ROIs to ensure that all possible shorelines are contained within the box - Roughly each ROI box is within 300m of the shore.
     1. Edit ROIs using ‘edit vertices’ or ‘reshape’ tools.
 ```diff
-! Tip: Raster products work in rectangular shapes, therefore thought these rois are at an angle, Google will download an image at the maximum and minimum XY positions. When adijusting the ROIs along the coast, keep this in mind to minimise overlap and prevent longer processing times through larger images.
+! Tip: Raster products work in rectangular shapes, therefore thought these rois are at an angle,
+!      Google will download an image at the maximum and minimum XY positions.
+!      When adijusting the ROIs along the coast, keep this in mind to minimise overlap and
+!      prevent longer processing times through larger images.
 ``` 
 
 ### 3.2 Extract Coordinates
