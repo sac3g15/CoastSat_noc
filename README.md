@@ -115,15 +115,27 @@ This section demonstrates a simple way to create a coordinate list of a study ar
     3. Perpendicular to the line = 2
     4. Overlap = 0
 
-6. Zoom to individual ROIs to ensure that all possible shorelines are contained within the box.
+6. Zoom to individual ROIs to ensure that all possible shorelines are contained within the box - Roughly each ROI box is within 300m of the shore.
     1. Edit ROIs using ‘edit vertices’ or ‘reshape’ tools.
+```diff
+! Tip: Raster products work in rectangular shapes, therefore thought these rois are at an angle, Google will download an image at the maximum and minimum XY positions. When adijusting the ROIs along the coast, keep this in mind to minimise overlap and prevent longer processing times through larger images.
+``` 
 
 ### 3.2 Extract Coordinates
 Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane.
 
-#### Refining ROI regions and creating buffer zone for clipping
-*NEED TO FINISH* 
+1. In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
+2. Double click ‘Extract Coordinates’ to open processor
+3. Input ROIs and the output location folder (e.g. ‘CoastSat-master_vSC’)
+4. Run.
 
+This will create a spreasheet of coordinates which we then need to make a list.
+1. Open in excel. Delete Column OBJECTID and top row, then click save
+2. Re-open the saved file in a text editor (e.g. notepad/notepad++)
+3. Find and Replace.
+4. Find ‘ ” ’. Replace ‘ ‘.
+5. Find ‘ ]]), ’. Replace ‘ ]]),\ ‘.
+6. Remove \ symbol on the last coordinate
 
 A breakdown of the processes in the models is given in the below for clarity, understanding and scrutiny, with the hope to make this process full open sourced (i.e. no ArcGIS) in the future.
 
@@ -166,18 +178,6 @@ A breakdown of the processes in the models is given in the below for clarity, un
 </p>
          </details>
 
-1. In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
-2. Double click ‘Extract Coordinates’ to open processor
-3. Input ROIs and the output location folder (e.g. ‘CoastSat-master_vSC’)
-4. Run.
-
-This will create a spreasheet of coordinates which we then need to make a list.
-1. Open in excel. Delete Column OBJECTID and top row, then click save
-2. Re-open the saved file in a text editor (e.g. notepad/notepad++)
-3. Find and Replace.
-4. Find ‘ ” ’. Replace ‘ ‘.
-5. Find ‘ ]]), ’. Replace ‘ ]]),\ ‘.
-6. Remove \ symbol on the last coordinate
 
 ### 3.3	Begin processing
 1. Open Jupyter Notebook (following instructions in ‘Usage’) if not already open and navigate to `StudyArea_shoreline.ipyNote:`
