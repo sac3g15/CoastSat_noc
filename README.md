@@ -215,6 +215,7 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
     3. Administrative Boundary Line = Country admin line
     4. Coastal Zone = Admin Buffer
 3. Run.
+4. The buffer is set to 1km around the administrative line. THis is quite large, but will depend on the accruacy of the administrative line. If an accuracy admin or shoreline reference is available, reduce the buffer to ~500m which should reduce the volume of manual cleaning in the next stage.
 
 ```diff
 !   Note: Model detail deemed not necessary for outline,
