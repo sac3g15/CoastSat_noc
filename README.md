@@ -294,8 +294,8 @@ Task time = ~1.5 hrs (+1 hr processing time)
     4. DSAS_search = 170
 
 ### 5.1 Cast Transects ###
-Task Time = 
-**Description:** Here, the baseline is created by the oldest recorded shoreline delineated using satellite imagery, however a user-defined or secondary shoreline can be substituted. The 170m search limit is set here to prevent the creation of large transects in complex coastal locations such as estuaries or ports. Transects created at this stage greatly impacts the change statistics and should be interpreted carefully. Shallow sloping and frequently changing coastlines are likely to result in transects with extreme erosion or accretion rates and high errors and uncertainties.  It is highly recommended that careful visualization and editing should be carried out along in the study area. Users should look for transects which appear correctly orientated and extent to a reasonable distance between delineated shorelines.
+**Description:** Here, the baseline is created by the oldest recorded shoreline delineated using satellite imagery, however a user-defined or secondary shoreline can be substituted. The 170m search limit is set here to prevent the creation of large transects in complex coastal locations such as estuaries or ports, but customise this based on the rate of change in your coastlines. Transects created at this stage greatly impacts the change statistics and should be interpreted carefully. Shallow sloping and frequently changing coastlines are likely to result in transects with extreme erosion or accretion rates and high errors and uncertainties.  It is highly recommended that careful visualization and editing should be carried out along in the study area. Users should look for transects which appear correctly orientated and extent to a reasonable distance between delineated shorelines.
+
 1. Input the following
     1. 170 from baseline
     2. 50 spacing
@@ -314,7 +314,7 @@ Task Time =
 **Description:** The DSAS forecast uses a Kalman filter (Kalman, 1960) to combine observed shoreline positions with model-derived positions to forecast a future shoreline position (10- or 20-year) as developed by Long and Plant (2012). The model begins at the first time-step (the date of the earliest survey) and predicts/forecasts the shoreline position for each successive time step until another shoreline observation is encountered. Whenever a shoreline observation is encountered, the Kalman Filter performs an analysis to minimize the error between the modelled and observed shoreline positions to improve the forecast, including updating the rate and uncertainties (Long and Plant, 2012). 
 
 ```diff
-! NB: As noted in the DSAS user guide, the forecasts produced by this tool should be used with caution.
+! Note: As noted in the DSAS user guide, the forecasts produced by this tool should be used with caution.
 !     The processes driving shoreline change are complicated and not always available as model inputs.
 !     Many factors that may be important are not considered in this methodology or accounted for within
 !     the uncertainty. This methodology assumes that a linear regression thorough past shoreline positions
