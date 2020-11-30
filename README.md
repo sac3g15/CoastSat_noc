@@ -274,7 +274,8 @@ Task time = ~15mins (dependant on size/complexity of study area)
             dd = "01"
             return mm + "/" + dd + "/" + yyyy
         ```
-4.	Select by attributes. Year = 2000. Find shoreline sections remaining c year 2000. Find next oldest shoreline and add to selection.
+4.	Select by attributes. Year = 2000 (or earliest year shoreline).
+    1. Explore along the shoreline to check that a near-complete line has been selected. If not, add next earliest year to selection (by holding the shift button and clicking on the shoreline).
 5.	Export selected and save as baseline - ‘Tunisia_baseline_2000_2020’.
 
 ##	5. Shoreline Change Statistics (DSAS) ##
