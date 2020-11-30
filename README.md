@@ -280,7 +280,19 @@ Task time = ~15mins (dependant on size/complexity of study area)
 ##	5. Shoreline Change Statistics (DSAS) ##
 Task time = ~1.5 hrs (+1 hr processing time)
 
+Before installing the DSAS v5.0 application, ensure that your system meets the following requirements (installation of new
+applications will require administrative rights).
+1. Windows 7 or Windows 10 operating system.
+2. ArcGIS Desktop Standard 10.4 or 10.5.
+    1. ArcGIS .NET support feature (installed by default)
+    2. Microsoft .NET framework of 4.5.2 or later (installed by default)
+3. The computer’s date format must be set to English (USA), mm/dd/yyyy.
+    1. To check your operating system, Click the Start button, enter “Computer” in the search box, right-click “Computer,” and then click “Properties.” Look under “Windows edition” for the version and edition of Windows that your computer is running.
+    2. To check the ArcMap version: From ArcMap or ArcCatalog, select Help >> About ArcMap to see the ArcGIS version number.
+    3. To verify the date format, go to the Control Panel menu and choose the option for Region and Language. Select “English(United States),” for the format, and make sure the date format is set to “mm/dd/yyyy.”
+
 **Description:** Digital Shoreline Analysis System is a freely available software application that works within the Esri Geographic Information System (ArcGIS) software. DSAS computes rate-of-change statistics for a time series of shoreline vector data. Install the DSAS plug-in [here](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas?qt-science_center_objects=0#qt-science_center_objects).
+
 1.	Open ArcMap.
 2.	In the Catalog panel, connect to the map document folder with the shoreline data.
 3.	Create new personal file geodatabase by right clicking on the newly connected folder. New > personal file geodatabase. Rename ‘Shoreline Rates.mdb’
