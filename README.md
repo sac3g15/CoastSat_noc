@@ -1,8 +1,8 @@
 # CoastSat_nocs
 
-CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
+CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
 
-Coastsat_nocs has banched from coastsat to include the following changes:
+Coastsat_nocs has branched from coastsat to include the following changes:
 * Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
 * The user can loop through multiple study areas rather than a single polygon
 * Multiple date ranges (+ satellites) can be specified
@@ -125,7 +125,7 @@ This section demonstrates a simple way to create a coordinate list of a study ar
 ``` 
 
 ### 3.2 Extract Coordinates
-Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the nuame in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane.
+Once the ROIs have been established, we need to extract the coordinates to a list in order to run the modified coastsat script. The first of four ArcGIS models is used. These models combine multiple ArcGIS functions in a clear chain structure that can be viewed in the edit window (Right click model in toolbox > Edit). The model can be run by double clicking the name in the catalog pane as well as in the edit window which can be more reliable if a process fails in the geoprocessing pane.
 
 1. In map document, in Catalog window. Under toolboxes > right click > Add Toolbox > navigate to CoastSat-master_vSC > ShorelineChangeTools > ShorelineChange.tbx
 2. Double click ‘Extract Coordinates’ to open processor
@@ -202,7 +202,7 @@ A breakdown of the processes in the models is given in the below for clarity, un
 ```
 
 ### 4. Clean and clip shorelines
-**Description:** The output geojson (see below) is a single line which connects all delineated shorelines and includes those created by inland or offshore features. Therefore, the raw shorelines produced by the Coastsat module need to be cleaned and clipped to the region of interest.
+**Description:** The output geojson (see below) is a single line which connects all delineated shorelines as well as false lines created by inland or offshore features. Therefore, the raw shorelines produced by the Coastsat module need to be cleaned and clipped to the region of interest.
 
 #### 4.1 Define Shoreline Cleaning Variables and clean shorelines ####
 Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
