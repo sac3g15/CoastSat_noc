@@ -455,6 +455,7 @@ def process_shoreline(contours, cloud_mask, georef, image_epsg, settings):
                 idx_keep[k] = False
         shoreline = shoreline[idx_keep]
 
+    numpy.savetxt('C:/Users/stcarp/Downloads/shoreline.csv', shoreline, delimiter=",")    
     return shoreline
 
 def show_detection(im_ms, cloud_mask, im_labels, shoreline,image_epsg, georef,
@@ -763,14 +764,6 @@ def extract_shorelines(metadata, settings):
                 cloud_mask_adv = cloud_mask
             else:
                 cloud_mask_adv = np.logical_xor(cloud_mask, im_nodata)
-
-            # calculate cloud cover
-            cloud_cover = np.divide(sum(sum(cloud_mask_adv.astype(int))),
-                                    (cloud_mask.shape[0]*cloud_mask.shape[1]))
-            
-            # skip image if cloud cover is above threshold
-            if cloud_cover > settings['cloud_thresh']:
-                continue
 
             # calculate a buffer around the reference shoreline (if any has been digitised)
             im_ref_buffer = create_shoreline_buffer(cloud_mask.shape, georef, image_epsg,

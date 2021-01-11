@@ -285,7 +285,8 @@ def preprocess_single(fn, satname, cloud_mask_issue):
         # create cloud mask
         im_QA = im_ms[:,:,5]
         im_ms = im_ms[:,:,:-1]
-        cloud_mask = create_cloud_mask(im_QA, satname, cloud_mask_issue)
+        cloud_mask = np.full((im_QA.shape), False)
+        #create_cloud_mask(im_QA, satname, cloud_mask_issue)
 
         # resize the image using bilinear interpolation (order 1)
         im_ms = transform.resize(im_ms,(nrows, ncols), order=1, preserve_range=True,
@@ -344,8 +345,9 @@ def preprocess_single(fn, satname, cloud_mask_issue):
 
         # create cloud mask
         im_QA = im_ms[:,:,5]
-        cloud_mask = create_cloud_mask(im_QA, satname, cloud_mask_issue)
-
+        cloud_mask = np.full((im_QA.shape), False)
+        #create_cloud_mask(im_QA, satname, cloud_mask_issue)
+        
         # resize the image using bilinear interpolation (order 1)
         im_ms = im_ms[:,:,:5]
         im_ms = transform.resize(im_ms,(nrows, ncols), order=1, preserve_range=True,
@@ -406,7 +408,8 @@ def preprocess_single(fn, satname, cloud_mask_issue):
 
         # create cloud mask
         im_QA = im_ms[:,:,5]
-        cloud_mask = create_cloud_mask(im_QA, satname, cloud_mask_issue)
+        cloud_mask = np.full((im_QA.shape), False)
+        #cloud_mask = create_cloud_mask(im_QA, satname, cloud_mask_issue)
 
         # resize the image using bilinear interpolation (order 1)
         im_ms = im_ms[:,:,:5]
@@ -447,7 +450,7 @@ def preprocess_single(fn, satname, cloud_mask_issue):
     # S2 images
     #=============================================================================================#
     if satname == 'S2':
-
+        
         # read 10m bands (R,G,B,NIR)
         fn10 = fn[0]
         data = gdal.Open(fn10, gdal.GA_ReadOnly)
@@ -483,14 +486,18 @@ def preprocess_single(fn, satname, cloud_mask_issue):
 
         # append down-sampled SWIR1 band to the other 10m bands
         im_ms = np.append(im10, im_swir, axis=2)
+        
 
         # create cloud mask using 60m QA band (not as good as Landsat cloud cover)
-        fn60 = fn[2]
-        data = gdal.Open(fn60, gdal.GA_ReadOnly)
+        fn20 = fn[2]
+        data = gdal.Open(fn20, gdal.GA_ReadOnly)
         bands = [data.GetRasterBand(k + 1).ReadAsArray() for k in range(data.RasterCount)]
-        im60 = np.stack(bands, 2)
-        im_QA = im60[:,:,0]
-        cloud_mask = create_cloud_mask(im_QA, satname, cloud_mask_issue)
+        im20 = np.stack(bands, 2)
+        im_QA = im20[:,:,0]
+        cloud_mask = np.full((im_QA.shape), False)
+
+        #create_cloud_mask(im_QA, satname, cloud_mask_issue)
+        
         # resize the cloud mask using nearest neighbour interpolation (order 0)
         cloud_mask = transform.resize(cloud_mask,(nrows, ncols), order=0, preserve_range=True,
                                       mode='constant')

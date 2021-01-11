@@ -353,6 +353,9 @@ Depedant on the loction, there can be a miss alignment (or miss registration) be
 
 Still having a problem? Post an issue in the [Issues page](https://github.com/sac3g15/coastsat_noc/issues) (please do not email).
 
+#### Algorthim Development Decisions ####
+
+Landsat Cloud Mask Cloud Score = 25, less than that, sand gets scored highly and is therefore masked
 
 ## References
 
