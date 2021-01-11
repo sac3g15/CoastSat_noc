@@ -6,10 +6,10 @@ Coastsat_nocs has branched from coastsat to include the following changes:
 * Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
 * The user can loop through multiple study areas rather than a single polygon
 * Multiple date ranges (+ satellites) can be specified
-* A co-registration process to align Landsat to Sentinel-2
+* Landsat collections can be merged to increase the number of images used in the median
+* Improved cloud masking process using Landsat Cloud Score and the Sentinel 2 Cloud Probabiity layer
 * Automated shoreline cleaning models
 * Instructions for shoreline change rate and forecasting (10- and 20-Year) using Digital Shoreline Analysis System (DSAS) - ArcMap plug-in.
-* Landsat 5 not available in this code – working on solution
 
 The underlying approach of the CoastSat toolkit are described in detail in:
 * Vos K., Splinter K.D., Harley M.D., Simmons J.A., Turner I.L. (2019). CoastSat: a Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. *Environmental Modelling and Software*. 122, 104528. https://doi.org/10.1016/j.envsoft.2019.104528
@@ -45,7 +45,7 @@ Previously, our understanding of shoreline dynamics was limited to single photog
 
 
 ## LIMITATIONS
-Landsat / Sentinel co-registration issue - Coregistration process uses displace() and displacement() from GEE. In some areas there remains a coregistration issue which can be seen when there are large and unexpected distances between shorelines delineated between Landsat and Sentinel images. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here](#Comment-on-Co-registration "Goto Comment-on-Co-registration")
+Landsat / Sentinel co-registration issue - Coregistration between the satellites was originally set up within the code, however, inconsistencies in the GEE functions displace() and displacement() resulted in this being temporally removed from the code. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here](#Comment-on-Co-registration "Goto Comment-on-Co-registration")
 
 Cloud persistance - In cloud presistant areas and where there are few images in the median collection (count can be found in 'median_no' in shoreline attribute table), clouds can remain in the image. Due to their spectral similarity to sand, some false shorelines can be delineated.
 
@@ -85,7 +85,7 @@ The jupyter notebook is where you can customise the processing to your needs - i
 There are additional parameters (`min_beach_size`, `buffer_size`, `min_length_sl`, `cloud_mask_issue` and `sand_color`) that can be tuned to optimise the shoreline detection in a specific area.
 
 ### 3.1 Example of how to create a coordinate list at study site
-This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis 
+This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis, likewise, the user can digitise ROI's (smaller than 100km2) instead of following the code below.
 
 ```diff
 ! Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time.
