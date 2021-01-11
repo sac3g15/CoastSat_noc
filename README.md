@@ -74,7 +74,8 @@ The jupyter notebook is where you can customise the processing to your needs - i
 2. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
 3. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections).
 
-        FYI.    Landsat 7 = January 1999 - Present
+        FYI.    Landsat 5 = 1984-01-01 - 2012-05-05 (Limited Coverage in some areas)
+                Landsat 7 = January 1999 - Present
                 Landsat 8 = April 2013 - Present
                 Sentinel 2 = 2015-06-23 – Present
 
