@@ -7,16 +7,17 @@ Author: Kilian Vos, Water Research Laboratory, University of New South Wales
 
 # load modules
 import os
-import numpy as np
+import numpy as npypers
 import matplotlib.pyplot as plt
 import pdb
-import numpy
+import numpy as np
 # earth engine modules
 import ee
 from urllib.request import urlretrieve
 import zipfile
 import copy
 from datetime import date
+from dateutil.relativedelta import *
 
 # additional modules
 from datetime import datetime, timedelta
@@ -24,6 +25,7 @@ import pytz
 import pickle
 from skimage import morphology, transform
 from scipy import ndimage
+
 
 # CoastSat modules
 #from coastsat import SDS_preprocess, SDS_tools, gdal_merge
@@ -767,17 +769,23 @@ def retrieve_images(inputs, settings):
         bands = dict([])
         bands[''] = ['blue', 'green', 'red', 'nir','swir1','BQA']
 
-        
-        #displacement = Landsat_Coregistration(inputs)
-        #print ('displacement calculated')
+        if settings['coregistration'] == True:
 
-        #Apply XY displacement values from overlapping images to the median composite
-        #registered = median_img.displace(displacement, mode="bicubic")     
-        #print ('Registered')
+            displacement = Landsat_Coregistration(inputs)
+            print ('displacement calculated')
+    
+            #Apply XY displacement values from overlapping images to the median composite
+            registered = median_img.displace(displacement, mode="bicubic")     
+            print ('Registered')
+            
+            # download .tif from EE
+            get_url('data', registered, 30, inputs['polygon'], filepaths[1], bands[''])
+            print ('Downloaded')
         
-        # download .tif from EE
-        get_url('data', median_img, ee.Number(30), inputs['polygon'], filepaths[1], bands[''])
-        print ('Downloaded')
+        else:
+            # download .tif from EE
+            get_url('data', median_img, ee.Number(30), inputs['polygon'], filepaths[1], bands[''])
+            print ('Downloaded')            
         
         #rename the file as the image is downloaded as 'data.tif'
         #locate download
@@ -829,18 +837,23 @@ def retrieve_images(inputs, settings):
         bands = dict([])
         bands['pan'] = ['pan'] # panchromatic band
         bands['ms'] = ['blue', 'green', 'red', 'nir','swir1','BQA']
-
+        
+        if settings['coregistration'] == True:
+            displacement = Landsat_Coregistration(inputs)
+            
+            #Apply XY displacement values from overlapping images to the median composite
+            registered = median_img.displace(displacement, mode="bicubic")     
+            print ('Co-registered')
          
-        #displacement = Landsat_Coregistration(inputs)
-
-        #Apply XY displacement values from overlapping images to the median composite
-        #registered = median_img.displace(displacement, mode="bicubic")     
-        #print ('Registered')
-     
-        #download .tif from EE
-        get_url('data', median_img, ee.Number(30), inputs['polygon'], filepaths[2], bands['ms'])
-        get_url('data', median_img, ee.Number(15), inputs['polygon'], filepaths[1], bands['pan'])
-        print ('Downloaded')
+            #download .tif from EE
+            get_url('data', registered, 30, inputs['polygon'], filepaths[2], bands['ms'])
+            get_url('data', registered, 15, inputs['polygon'], filepaths[1], bands['pan'])
+            print ('Downloaded')
+        else:
+            #download .tif from EE
+            get_url('data', median_img, ee.Number(30), inputs['polygon'], filepaths[2], bands['ms'])
+            get_url('data', median_img, ee.Number(15), inputs['polygon'], filepaths[1], bands['pan'])
+            print ('Downloaded')           
         
         #rename the file as the image is downloaded as 'data.tif'
         #locate download
@@ -899,16 +912,24 @@ def retrieve_images(inputs, settings):
         bands['pan'] = ['pan'] # panchromatic band
         bands['ms'] = ['blue', 'green', 'red', 'nir','swir1','BQA']
         
-        #displacement = Landsat_Coregistration(inputs)
-
-        #Apply XY displacement values from overlapping images to the median composite
-        #registered = median_img.displace(displacement, mode="bicubic")     
-        #print ('Co-registered')
-                
-        #download .tif from EE
-        get_url('data', median_img, ee.Number(30), inputs['polygon'], filepaths[2], bands['ms'])
-        get_url('data', median_img, ee.Number(15), inputs['polygon'], filepaths[1], bands['pan'])
-        print ('Downloaded')
+        if settings['coregistration'] == True:
+       
+            displacement = Landsat_Coregistration(inputs)
+    
+            #Apply XY displacement values from overlapping images to the median composite
+            registered = median_img.displace(displacement, mode="bicubic")     
+            print ('Co-registered')
+                    
+            #download .tif from EE
+            get_url('data', registered, 30, inputs['polygon'], filepaths[2], bands['ms'])
+            get_url('data', registered, 15, inputs['polygon'], filepaths[1], bands['pan'])
+            print ('Downloaded')
+            
+        else:
+             #download .tif from EE
+            get_url('data', median_img, ee.Number(30), inputs['polygon'], filepaths[2], bands['ms'])
+            get_url('data', median_img, ee.Number(15), inputs['polygon'], filepaths[1], bands['pan'])
+            print ('Downloaded')           
         
         #rename the file as the image is downloaded as 'data.tif'
         #locate download
@@ -1164,10 +1185,6 @@ def get_metadata(inputs):
                     dates = int(f.readline().split('\t')[1].replace('\n',''))
                     median_no = int(f.readline().split('\t')[1].replace('\n',''))
                     
-                # date_str = filename[0:19]
-                # date = pytz.utc.localize(datetime(int(date_str[:4]),int(date_str[5:7]),
-                #                                   int(date_str[8:10]),int(date_str[11:13]),
-                #                                   int(date_str[14:16]),int(date_str[17:19])))
                 # store the information in the metadata dict
                 metadata[sat_list]['filenames'].append(filename)
                 metadata[sat_list]['median_no'].append(median_no)
@@ -1185,45 +1202,57 @@ def Landsat_Coregistration(inputs):
         #Find Overlapping cloud-minimal image of Landsat 8 and Sentinel 2
         #Landsat 8 image
         L8_reference = ee.ImageCollection('LANDSAT/LC08/C01/T1_SR')\
-                       .filterDate('2016-01-01', '2016-03-01')\
-                       .filterBounds(ee.Geometry.Polygon(inputs['polygon']))\
-                       .filterMetadata('CLOUD_COVER','less_than', 50)\
-                       .first()\
-                       .select(4)
+                        .filterDate('2017-03-28', '9999-03-01')\
+                        .filterBounds(ee.Geometry.Polygon(inputs['polygon']))\
+                        .filterMetadata('CLOUD_COVER','less_than', 50)\
+                        .sort('CLOUD_COVER')\
+                        .first()\
+                        .select('B2','B3','B4')
+
+
+        # Extract Date and find S2 image within 4 months
+        cloud = L8_reference.get('CLOUD_COVER').getInfo()
+        time = (L8_reference.get('system:index').getInfo())
+        year = time[12:16]
+        month = time[16:18]
+        day = time[18:20]
+        L8_date = datetime(int(year), int(month), int(day))
+        #print('Landsat co-registration (slave) image date: ', L8_date)
+        print('Landsat co-registration (slave) image cloud cover: ', cloud)        
+        s2_start_date = L8_date + relativedelta(months=-3)
+        s2_end_date = L8_date + relativedelta(months=+3)
         
         #Sentinel 2 image
-        S2_reference = ee.ImageCollection('COPERNICUS/S2_SR')
-        dated=S2_reference.filterDate('2016-01-01', '2016-03-01')
-        bounds = dated.filterBounds(ee.Geometry.Polygon(inputs['polygon']))
-        cloud = bounds.filterMetadata('CLOUDY_PIXEL_PERCENTAGE','less_than', 50)
-        first = cloud.first()
-        S2Red = first.select(7)
+        S2_reference = ee.ImageCollection('COPERNICUS/S2_SR')\
+            .filterDate(str(s2_start_date)[:10], str(s2_end_date)[:10])\
+            .filterBounds(ee.Geometry.Polygon(inputs['polygon']))\
+            .filterMetadata('CLOUDY_PIXEL_PERCENTAGE','less_than', 50)\
+            .sort('CLOUDY_PIXEL_PERCENTAGE')\
+            .first()\
+            .select('B2','B3','B4')
+        
+        cloud = S2_reference.get('CLOUDY_PIXEL_PERCENTAGE').getInfo()
+        # time = (S2_reference.get('system:index').getInfo())
+        # print(time)
+        # year = time[0:3]
+        # month = time[3:6]
+        # day = time[6:8]
+        # s2_date = datetime(int(year), int(month), int(day))
+        # print('Sentinel co-registration (master) image date: ', s2_date)    
+        print('Sentinel co-registration (master) image cloud cover: ', cloud)
         
         #Extract Projection of Landsat 8 image
         proj = L8_reference.projection()
         
         #Match the Sentinel 2 resolution with Landsat 8 image
-        S2_reduced = S2Red.reduceResolution(reducer = ee.Reducer.mean(), maxPixels = 1024)
+        S2_reduced = S2_reference.reduceResolution(reducer = ee.Reducer.mean(), maxPixels = 1024)
         S2_reproject = S2_reduced.reproject(crs=proj)
         
         #Find X and Y components (in meters) of the displacement vector at each pixel.
         displacement = L8_reference.displacement(
             referenceImage = S2_reproject,
             maxOffset= 50.0,
-            stiffness = 9,
+            stiffness = 10,
             )
-
-        #im_fn = inputs['sat_list'] + '_' + inputs['sitename'] + '_median' 
-
-        # Export the image, specifying scale and region.
-        task = ee.batch.Export.image.toDrive(**{
-            'image': displacement,
-            'description': ( inputs['sitename'] + '_2016'),
-            'folder':'Example_folder',
-            'scale': 30,
-            'region': (inputs['polygon'])
-        })
-        task.start()
-        print ('Offset Downloaded')
 
         return displacement
