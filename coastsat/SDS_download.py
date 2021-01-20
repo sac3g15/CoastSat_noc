@@ -84,6 +84,29 @@ def check_images_available(inputs):
     
         return im_dict_T1, sum_img
 
+def time_in_range(start, end, x):
+    """
+    Return true if x is in the date range [start, end]
+
+    Parameters
+    ----------
+    start : datetime(x,y,z)
+        Date time format start
+    end : datetime(x,y,z)
+        Date time format end
+    x : datetime(x,y,z)
+        Is Date time format within start / end
+
+    Returns
+    -------
+    TYPE
+        True/False.  
+    """
+    
+    if start <= end:
+        return start <= x <= end
+    else:
+        return start <= x or x <= end
 
 def get_s2_sr_cld_col(aoi, start_date, end_date, CLOUD_FILTER):
     """
@@ -118,11 +141,27 @@ def get_s2_sr_cld_col(aoi, start_date, end_date, CLOUD_FILTER):
         DESCRIPTION.
 
     """
-    # Import and filter S2 SR.
-    s2_sr_col = (ee.ImageCollection('COPERNICUS/S2_SR')
-        .filterBounds(aoi)
-        .filterDate(start_date, end_date)
-        .filter(ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE', CLOUD_FILTER)))
+    # End date from user input range
+    user_end = end_date.split("-")
+    # Period of Sentinel 2 data before Surface reflectance data is available
+    start = datetime(2015, 6, 23)
+    end = datetime(2017, 3, 28)                    
+
+    # Is end date within pre S2_SR period?
+    if time_in_range(start, end, datetime(int(user_end[0]), int(user_end[1]), int(user_end[2]))) == False:
+        # Import and filter S2 SR.
+        s2_sr_col = (ee.ImageCollection('COPERNICUS/S2_SR')
+            .filterBounds(aoi)
+            .filterDate(start_date, end_date)
+            .filter(ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE', CLOUD_FILTER)))
+
+    else:
+        # Import and filter S2 SR.
+        s2_sr_col = (ee.ImageCollection('COPERNICUS/S2')
+            .filterBounds(aoi)
+            .filterDate(start_date, end_date)
+            .filter(ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE', CLOUD_FILTER)))
+    
 
     # Import and filter s2cloudless.
     s2_cloudless_col = (ee.ImageCollection('COPERNICUS/S2_CLOUD_PROBABILITY')
@@ -290,7 +329,6 @@ def obtain_image_median(collection, time_range, area, satname, settings):
            print ('   Total: ' + str(img_count))
        
        return image_median, sum_img
-
  
     if satname == ['L7']:
        ## Filter by time range and location
@@ -640,12 +678,26 @@ def obtain_image_median(collection, time_range, area, satname, settings):
             
             # Add cloud component bands.
             img_cloud = add_cloud_bands(img)
+
+            # End date from user input range
+            user_end = time_range[1].split("-")
+            # Period of Sentinel 2 data before Surface reflectance data is available
+            start = datetime(2015, 6, 23)
+            end = datetime(2017, 3, 28)                    
+
+            # Is end date within pre S2_SR period?
+            if time_in_range(start, end, datetime(int(user_end[0]), int(user_end[1]), int(user_end[2]))) == False:
+                                   # Add cloud shadow component bands.
+                                   img_cloud_shadow = add_shadow_bands(img_cloud)
+                                   # Combine cloud and shadow mask, set cloud and shadow as value 1, else 0.
+                                   is_cld_shdw = img_cloud_shadow.select('clouds').add(img_cloud_shadow.select('shadows')).gt(0)
         
-            # Add cloud shadow component bands.
-            img_cloud_shadow = add_shadow_bands(img_cloud)
-        
-            # Combine cloud and shadow mask, set cloud and shadow as value 1, else 0.
-            is_cld_shdw = img_cloud_shadow.select('clouds').add(img_cloud_shadow.select('shadows')).gt(0)
+            else:
+                # Add cloud shadow component bands.
+                img_cloud_shadow = img_cloud
+                # Combine cloud and shadow mask, set cloud and shadow as value 1, else 0.
+                is_cld_shdw = img_cloud.select('clouds').gt(0)
+                
         
             # Remove small cloud-shadow patches and dilate remaining pixels by BUFFER input.
             # 20 m scale is for speed, and assumes clouds don't require 10 m precision.
@@ -669,6 +721,7 @@ def obtain_image_median(collection, time_range, area, satname, settings):
             # Subset reflectance bands and update their masks, return the result.
             return img.select('B.*').updateMask(not_cld_shdw)
         
+        #Build masks and apply to S2 image
         s2_sr_cld_col, sum_img = get_s2_sr_cld_col(area, time_range[0], time_range[1], settings['CLOUD_FILTER'])
         image_median = (s2_sr_cld_col.map(add_cld_shdw_mask)
                              .map(apply_cld_shdw_mask)
@@ -679,6 +732,7 @@ def obtain_image_median(collection, time_range, area, satname, settings):
         # image_2 = image_area.filterMetadata('CLOUDY_PIXEL_PERCENTAGE','less_than', 40)
         # image_median = image_2.median()
         return image_median, sum_img 
+
 
 def retrieve_images(inputs, settings):
     """
