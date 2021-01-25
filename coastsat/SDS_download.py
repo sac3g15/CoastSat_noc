@@ -1256,7 +1256,7 @@ def Landsat_Coregistration(inputs):
         #Find Overlapping cloud-minimal image of Landsat 8 and Sentinel 2
         #Landsat 8 image
         L8_reference = ee.ImageCollection('LANDSAT/LC08/C01/T1_SR')\
-                        .filterDate('2017-03-28', '9999-03-01')\
+                        .filterDate('2019-01-01', '9999-03-01')\
                         .filterBounds(ee.Geometry.Polygon(inputs['polygon']))\
                         .filterMetadata('CLOUD_COVER','less_than', 50)\
                         .sort('CLOUD_COVER')\
@@ -1275,19 +1275,18 @@ def Landsat_Coregistration(inputs):
         print('Landsat co-registration (slave) image cloud cover: ', cloud)        
         s2_start_date = L8_date + relativedelta(months=-3)
         s2_end_date = L8_date + relativedelta(months=+3)
-        
+
         #Sentinel 2 image
         S2_reference = ee.ImageCollection('COPERNICUS/S2_SR')\
             .filterDate(str(s2_start_date)[:10], str(s2_end_date)[:10])\
             .filterBounds(ee.Geometry.Polygon(inputs['polygon']))\
-            .filterMetadata('CLOUDY_PIXEL_PERCENTAGE','less_than', 50)\
+            .filterMetadata('CLOUDY_PIXEL_PERCENTAGE','less_than', 60)\
             .sort('CLOUDY_PIXEL_PERCENTAGE')\
             .first()\
             .select('B2','B3','B4')
         
         cloud = S2_reference.get('CLOUDY_PIXEL_PERCENTAGE').getInfo()
         # time = (S2_reference.get('system:index').getInfo())
-        # print(time)
         # year = time[0:3]
         # month = time[3:6]
         # day = time[6:8]
