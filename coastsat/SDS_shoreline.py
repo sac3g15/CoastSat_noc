@@ -455,7 +455,6 @@ def process_shoreline(contours, cloud_mask, georef, image_epsg, settings):
                 idx_keep[k] = False
         shoreline = shoreline[idx_keep]
 
-    numpy.savetxt('C:/Users/stcarp/Downloads/shoreline.csv', shoreline, delimiter=",")    
     return shoreline
 
 def show_detection(im_ms, cloud_mask, im_labels, shoreline,image_epsg, georef,
