@@ -446,11 +446,12 @@ def obtain_image_median(collection, time_range, area, satname, settings):
                sum_img = img_count
                print ('   Total: ' + str(sum_img))
                pass
-                  
-               
+       else:
+           sum_img = img_count
+           print ('   Total: ' + str(sum_img))
+                            
        # Take median of Collection
        image_median_no_pan = filteredCollection_masked.median()
-
                        
        ## Add panchromatic band to collection from Landsat 7
        # Add Panchromatic Band
@@ -582,7 +583,7 @@ def obtain_image_median(collection, time_range, area, satname, settings):
            print ('   L7: ' + str(L7_count))
            
            # Merge Collections
-           filteredCollection = filteredCollection_masked.merge(L7_filteredCollection_masked)
+           L8_filteredCollection = filteredCollection_masked.merge(L7_filteredCollection_masked)
            sum_img = img_count + L7_count
            print ('   Total: ' + str(img_count + L7_count))
                   
@@ -592,7 +593,7 @@ def obtain_image_median(collection, time_range, area, satname, settings):
            pass
        
        #Take median of Collection
-       image_median = filteredCollection.median()
+       image_median = L8_filteredCollection.median()
 
        
        return image_median, sum_img
@@ -963,8 +964,8 @@ def retrieve_images(inputs, settings):
         im_bands = metadata['bands']
         
         bands = dict([])
-        bands['pan'] = ['pan'] # panchromatic band
-        bands['ms'] = ['blue', 'green', 'red', 'nir','swir1','BQA']
+        bands['pan'] = ['B8'] # panchromatic band
+        bands['ms'] = ['B2', 'B3', 'B4', 'B5','B6','BQA']
         
         if settings['coregistration'] == True:
        

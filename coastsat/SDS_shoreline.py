@@ -655,7 +655,7 @@ def show_detection(im_ms, cloud_mask, im_labels, shoreline,image_epsg, georef,
     return skip_image
 
 
-def extract_shorelines(metadata, settings):
+def extract_shorelines(metadata, settings, inputs):
     """
     Main function to extract shorelines from satellite images
 
@@ -720,10 +720,10 @@ def extract_shorelines(metadata, settings):
         filenames = metadata[satname]['filenames']
 
         # initialise the output variables
-        output_timestamp = []  # datetime at which the image was acquired (UTC time)
+        output_start_time = []  # datetime at which the image was acquired (UTC time)
+        output_end_time = [] # end time
         output_shoreline = []  # vector of shoreline points
         output_filename = []   # filename of the images from which the shorelines where derived
-        #output_cloudcover = [] # cloud cover of the images
         output_median_no = []# georeferencing accuracy of the images
         output_idxkeep = []    # index that were kept during the analysis (cloudy images are skipped)
 
@@ -805,19 +805,19 @@ def extract_shorelines(metadata, settings):
                     continue
 
             # append to output variables
-            output_timestamp.append(metadata[satname]['dates'][i])
+            output_start_time.append(inputs['dates'][0])
+            output_end_time.append(inputs['dates'][1])
             output_shoreline.append(shoreline)
             output_filename.append(filenames[i])
-            #output_cloudcover.append(cloud_cover)
             output_median_no.append(metadata[satname]['median_no'][i])
             output_idxkeep.append(i)
            
         # create dictionnary of output
         output[satname] = {
-                'dates': output_timestamp,
+                'start': output_start_time,
                 'shorelines': output_shoreline,
-                'filename': output_filename,
-                #'cloud_cover': output_cloudcover,
+                'filenamse': output_filename,
+                'end': output_end_time,
                 'median_no': output_median_no,
                 'idx': output_idxkeep
                 }

@@ -405,9 +405,9 @@ def merge_output(output):
         for key in output[satnames[0]].keys():
             output_all[key] = output_all[key] + output[satname][key]
         output_all['satname'] = output_all['satname'] + [_ for _ in np.tile(satname,
-                  len(output[satname]['dates']))]
+                  len(output[satname]['start']))]
     # sort chronologically
-    idx_sorted = sorted(range(len(output_all['dates'])), key=output_all['dates'].__getitem__)
+    idx_sorted = sorted(range(len(output_all['start'])), key=output_all['start'].__getitem__)
     for key in output_all.keys():
         output_all[key] = [output_all[key][i] for i in idx_sorted]
 
@@ -504,7 +504,8 @@ def output_to_gdf(output):
             geom = geometry.LineString(output['shorelines'][i])
             gdf = gpd.GeoDataFrame(geometry=gpd.GeoSeries(geom))
             gdf.index = [i]
-            gdf.loc[i,'date'] = output['dates'][i]
+            gdf.loc[i,'start_date'] = output['start'][i]
+            gdf.loc[i,'end_date'] = output['end'][i]
             gdf.loc[i,'satname'] = output['satname'][i]
             gdf.loc[i,'Median_no'] = output['median_no'][i]
 
