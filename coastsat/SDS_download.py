@@ -962,10 +962,17 @@ def retrieve_images(inputs, settings):
         ##Extract band metadata and define those to download
         metadata = median_img.getInfo()
         im_bands = metadata['bands']
+
+        if settings['add_L7_to_L8'] == False:
         
-        bands = dict([])
-        bands['pan'] = ['B8'] # panchromatic band
-        bands['ms'] = ['B2', 'B3', 'B4', 'B5','B6','BQA']
+            bands = dict([])
+            bands['pan'] = ['B8'] # panchromatic band
+            bands['ms'] = ['B2', 'B3', 'B4', 'B5','B6','BQA']
+        else:
+            bands = dict([])
+            bands['pan'] = ['pan'] # panchromatic band
+            bands['ms'] = ['blue', 'green', 'red', 'nir','swir1','BQA']
+        
         
         if settings['coregistration'] == True:
        
