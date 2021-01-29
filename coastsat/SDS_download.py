@@ -142,7 +142,7 @@ def get_s2_sr_cld_col(aoi, start_date, end_date, CLOUD_FILTER):
 
     """
     # End date from user input range
-    user_end = end_date.split("-")
+    user_end = start_date.split("-")
     # Period of Sentinel 2 data before Surface reflectance data is available
     start = datetime(2015, 6, 23)
     end = datetime(2017, 3, 28)                    
@@ -154,14 +154,12 @@ def get_s2_sr_cld_col(aoi, start_date, end_date, CLOUD_FILTER):
             .filterBounds(aoi)
             .filterDate(start_date, end_date)
             .filter(ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE', CLOUD_FILTER)))
-
     else:
         # Import and filter S2 SR.
         s2_sr_col = (ee.ImageCollection('COPERNICUS/S2')
             .filterBounds(aoi)
             .filterDate(start_date, end_date)
             .filter(ee.Filter.lte('CLOUDY_PIXEL_PERCENTAGE', CLOUD_FILTER)))
-    
 
     # Import and filter s2cloudless.
     s2_cloudless_col = (ee.ImageCollection('COPERNICUS/S2_CLOUD_PROBABILITY')
@@ -681,7 +679,7 @@ def obtain_image_median(collection, time_range, area, satname, settings):
             img_cloud = add_cloud_bands(img)
 
             # End date from user input range
-            user_end = time_range[1].split("-")
+            user_end = time_range[0].split("-")
             # Period of Sentinel 2 data before Surface reflectance data is available
             start = datetime(2015, 6, 23)
             end = datetime(2017, 3, 28)                    
