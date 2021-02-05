@@ -15,40 +15,33 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
     3. Administrative Boundary Line = Country admin line
     4. Coastal Zone = Admin Buffer
 3. Run.
-4. The buffer is set to 1km around the administrative line. THis is quite large, but will depend on the accruacy of the administrative line. If an accuracy admin or shoreline reference is available, reduce the buffer to ~500m which should reduce the volume of manual cleaning in the next stage.
+4. The buffer is set to 1km around the administrative line. This is quite large, but will depend on the accruacy of the administrative line. If an accuracy admin or shoreline reference is available, reduce the buffer to a value as low as possible to remove outliers but encapsulate the shoreline between the time period defined. This adjustment should reduce the volume of manual cleaning in the next stage.
 
 ```diff
-!   Note: Model detail deemed not necessary for outline,
-!         for model structure right click model > edit in catalog pane.
+!   Note: For model structure, right click model > edit in catalog pane.
 ```
 
-4.	Once completed, open ‘Clean Shorelines’ in the same toolbox, this uses the two feature classes just created to refine the shoreline within the third model.
+4.	Create an empty line feature class.
+    1. Right Click geodatabase > 'new feature class'
+    2. Select polyline
+    3. Finish and save 'Shorelines'
+5.  Once completed, open ‘Clean Shorelines’ in the same toolbox, this uses the two feature classes just created to refine the shoreline within the third model.
 5.	Enter the following parameters:
-    1. Iterating Folder = Folder containing geojson files (e.g. ‘C:\Documents\EO4SD\Tunisia\CoastSat-master\data’
-    2. Coordinate System = Select appropriate coordinate system by searching for the epsg code defined in the settings for shoreline processing (e.g. 26191), and select the projected coordinate system
-    3. Output file = Navigate to batch geodatabase folder and enter “%Name%_cleaned”
+    1. Iterating Folder = Folder containing geojson files (e.g. ‘C:\CoastSat-main\data’)
+    2. Coordinate System = Select appropriate coordinate system by searching for the epsg code defined in the settings for shoreline processing (e.g. 32628), and select the projected coordinate system
+    3. Output file = Navigate to geodatabase folder and  select "Shorelines”
     4. ROI filtered file = ROI filtered (created above)
     5. Coastal Zone = Admin buffer (created above)
 6.	Run.
 
-```diff
-! Note: Using ‘%Name%’ in ArcGIS modal builder prevents overwriting the files
-!       by naming each file as its original name in the ‘Coastsat-master\data’ folder.
-```
 **If you like the repo put a star on it!**
 
 #### 4.2 Further clean, extract baseline and add attributes ####
-Task time = ~15mins (dependant on size/complexity of study area)
 
 **Description:** Some erroneous shorelines remain through the presence of clouds, the shadow/sun interface in mountainous regions or inland waters and rivers. A manual visualisation and edit process is required, before merging all the shorelines and adding fields required for the DSAS change analysis.
 
-1.	Manually view shorelines and remove unwanted vertices from lines using the edit window. This may include deleting unwanted/cloud present lines and unwanted years by using Split or Edit Vertices in the edit toolbar.
-2.	Combine all shorelines in output batch directory.
-    1. Merge
-    2. Input = shorelines E.g. ‘Tunisia_1_output_cleaned’, ‘Tunisia_2_output_cleaned’, …
-    3. Output = ‘Tunisia_shoreline_2000_2020’
-    4. Check the box Add source information to output
-3.	DSAS requires a date field formatted as mm/dd/yyyy. If using yearly composite, maintain same day and month.
+1.	Manually view shorelines and remove unwanted vertices from lines using the edit window. This may include deleting unwanted/cloud present lines and unwanted years by using 'Split' or 'Edit Vertices' tools in the edit toolbar.
+2.	DSAS requires a date field formatted as mm/dd/yyyy. If using yearly composite, maintain same day and month.
     1. Calculate field 
     2. New field = ‘date_shrt’
     3. Use the following expression:
