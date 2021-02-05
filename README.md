@@ -89,13 +89,14 @@ The jupyter notebook is where you can customise the processing to your needs. He
     **General Parameters:**
 
     1. `Output_epsg` =  Country-specific coordinate system (see https://epsg.io/)
-    
+
     **Quality Control:**
 
     2. `check_detection` = if True, shows each shoreline detection to the user for validation
     3. `save_figure` = if True, saves a figure showing the mapped shoreline for each image
 
     **[ONLY FOR ADVANCED USERS] Shoreline Detection Parameters:**
+
     4. `min_beach_area` = minimum area (in metres^2) for an object to be labelled as a beach
     5. `buffer_size`= radius (in metres) of the buffer around sandy pixels considered in the shoreline detection
     6. `min_length_sl` = minimum length (in metres) of shoreline perimeter to be valid
@@ -103,6 +104,7 @@ The jupyter notebook is where you can customise the processing to your needs. He
     8. `sand_color`= 'default', 'dark' (for grey/black sand beaches) or 'bright' (for white sand beaches)
 
     **Co-registration:**
+
     9. `coregistration`: True,
 
     **Image Download Parameters:**
@@ -115,7 +117,7 @@ The jupyter notebook is where you can customise the processing to your needs. He
     13. `add_L7_to_L8` = Add Landsat 7 to Landsat 8 median composite if they are in same time period
     14. `LCloudThreshold` = Pixels from a single image in a collection larger than this cloud score threshold will be masked.
 
-    # Sentinel
+    **Sentinel**
 
     15. `CLOUD_FILTER` = Maximum image cloud cover percent allowed in image collection
     16. `CLD_PRB_THRESH` = Cloud probability (%); values greater than are considered cloud
