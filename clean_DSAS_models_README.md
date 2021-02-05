@@ -1,5 +1,7 @@
 # Clean shorelines and calculate change
-The output of the Coastsat_nocs tool produces a uncleaned product for each year of shoreline data. Here we give an exemplar model within ArcGIS, which automatically cleans the product. Methods to produce shoreline change statistics are also given, walking through the [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap. This also has the ability to forecast change data, through a simple regression for the next 10 and 20 years
+The output of the Coastsat_nocs tool produces a uncleaned product for each year of shoreline data. Here we give an exemplar model within ArcGIS, which automatically cleans the product. Methods to produce shoreline change statistics are also given, walking through the [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap. This also has the ability to forecast change data, through a simple regression for the next 10 and 20 years.
+
+**This file contains direct references from the DSAS user guide by Himmelstoss et al. (2018).**
 
 ### 4. Clean and clip shorelines
 #### 4.1 Define Shoreline Cleaning Variables and clean shorelines ####
