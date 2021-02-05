@@ -10,7 +10,7 @@ Coastsat_nocs has branched from coastsat with the intention of producing large-s
 * Improved cloud masking process using Landsat Cloud Score and the Sentinel 2 Cloud Probabiity layer
 * Automated shoreline cleaning models
 * Instructions for shoreline change rate and forecasting (10- and 20-Year) using Digital Shoreline Analysis System (DSAS) - ArcMap plug-in.
-* A co-registration process **Performance not validated and is inconsistent - users encouraged to visualise differences between Landsat and Sentinel 2 before proceeding with calculating change between them** 
+* A co-registration process - **Performance not validated and is inconsistent - users encouraged to visualise differences between Landsat and Sentinel 2 before proceeding with calculating change between them** 
 
 The underlying approach of the CoastSat toolkit are described in detail in:
 * Vos K., Splinter K.D., Harley M.D., Simmons J.A., Turner I.L. (2019). CoastSat: a Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. *Environmental Modelling and Software*. 122, 104528. https://doi.org/10.1016/j.envsoft.2019.104528
