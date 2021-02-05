@@ -86,33 +86,32 @@ The jupyter notebook is where you can customise the processing to your needs. He
 
 4. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
 5. `Settings`: Some of the settings mimic the original
-    1. `Output_epsg` = 
-        **general parameters:**
-        `Output_epsg` =  Country-specific coordinate system (see https://epsg.io/)
-        **quality control**
-        `check_detection` = if True, shows each shoreline detection to the user for validation
-        `save_figure` = if True, saves a figure showing the mapped shoreline for each image
-        # [ONLY FOR ADVANCED USERS] shoreline detection parameters:
-        `min_beach_area` = minimum area (in metres^2) for an object to be labelled as a beach
-        `buffer_size`= radius (in metres) of the buffer around sandy pixels considered in the shoreline detection
-        `min_length_sl` = minimum length (in metres) of shoreline perimeter to be valid
-        `cloud_mask_issue` = switch this parameter to True if sand pixels are masked (in black) on many images  
-        `sand_color`= 'default', 'dark' (for grey/black sand beaches) or 'bright' (for white sand beaches)
-        **Co-registration**
-        `coregistration`: True,
-        **Image download Parameters**
-        **Landsat**
-        `LCloudScore` = Mean cloud score threshold (include images with less then threshold)
-        `add_L7_to_L5` = Add Landsat 7 to Landsat 5 median composite if they are in same time period
-        `add_L5_to_L7` = Add Landsat 5 to Landsat 7 median composite if they are in same time period
-        `add_L7_to_L8` = Add Landsat 7 to Landsat 8 median composite if they are in same time period
-        `LCloudThreshold` = Pixels from a single image in a collection larger than this cloud score threshold will be masked.
-        # Sentinel
-        `CLOUD_FILTER` = Maximum image cloud cover percent allowed in image collection
-        `CLD_PRB_THRESH` = Cloud probability (%); values greater than are considered cloud
-        `NIR_DRK_THRESH` = Near-infrared reflectance; values less than are considered potential cloud shadow
-        `CLD_PRJ_DIST`= Maximum distance (km) to search for cloud shadows from cloud edges
-        `BUFFER` = Distance (m) to dilate the edge of cloud-identified objects
+    **general parameters:**
+    1. `Output_epsg` =  Country-specific coordinate system (see https://epsg.io/)
+    **quality control:**
+    2. `check_detection` = if True, shows each shoreline detection to the user for validation
+    3. `save_figure` = if True, saves a figure showing the mapped shoreline for each image
+    **[ONLY FOR ADVANCED USERS] shoreline detection parameters:**
+    4. `min_beach_area` = minimum area (in metres^2) for an object to be labelled as a beach
+    5. `buffer_size`= radius (in metres) of the buffer around sandy pixels considered in the shoreline detection
+    6. `min_length_sl` = minimum length (in metres) of shoreline perimeter to be valid
+    7. `cloud_mask_issue` = switch this parameter to True if sand pixels are masked (in black) on many images  
+    8. `sand_color`= 'default', 'dark' (for grey/black sand beaches) or 'bright' (for white sand beaches)
+    **Co-registration:**
+    9. `coregistration`: True,
+    **Image download Parameters:**
+    **Landsat**
+    10. `LCloudScore` = Mean cloud score threshold (include images with less then threshold)
+    11. `add_L7_to_L5` = Add Landsat 7 to Landsat 5 median composite if they are in same time period
+    12. `add_L5_to_L7` = Add Landsat 5 to Landsat 7 median composite if they are in same time period
+    13. `add_L7_to_L8` = Add Landsat 7 to Landsat 8 median composite if they are in same time period
+    14. `LCloudThreshold` = Pixels from a single image in a collection larger than this cloud score threshold will be masked.
+    # Sentinel
+    15. `CLOUD_FILTER` = Maximum image cloud cover percent allowed in image collection
+    16. `CLD_PRB_THRESH` = Cloud probability (%); values greater than are considered cloud
+    17. `NIR_DRK_THRESH` = Near-infrared reflectance; values less than are considered potential cloud shadow
+    18. `CLD_PRJ_DIST`= Maximum distance (km) to search for cloud shadows from cloud edges
+    19. `BUFFER` = Distance (m) to dilate the edge of cloud-identified objects
 
 ### 3.1 Create a coordinate list of regions of interest at study site
 
