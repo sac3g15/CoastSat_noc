@@ -1,8 +1,8 @@
 # CoastSat_nocs
 
-CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
+CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 5, 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
 
-Coastsat_nocs has branched from coastsat to include the following changes:
+Coastsat_nocs has branched from coastsat with the intention of producing large-scale shoreline change analysis. The following changes have been made:
 * Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
 * The user can loop through multiple study areas rather than a single polygon
 * Multiple date ranges (+ satellites) can be specified
@@ -16,7 +16,11 @@ The underlying approach of the CoastSat toolkit are described in detail in:
 Example applications and accuracy of the resulting satellite-derived shorelines are discussed in:
 * Vos K., Harley M.D., Splinter K.D., Simmons J.A., Turner I.L. (2019). Sub-annual to multi-decadal shoreline variability from publicly available satellite imagery. *Coastal Engineering*. 150, 160–174. https://doi.org/10.1016/j.coastaleng.2019.04.004
 
-Section 2 includes instructions written by Vos et al. (2019). Section 5 includes direct references from the DSAS user guide by Himmelstoss et al. (2018).
+Section 2 includes instructions written by Vos et al. (2019).
+
+Extensions to this toolbox:
+- [Cleaning shoreline output + Shoreline Change using DSAS]()         
+ If you wish to clean the output of the shoreline data  Section 5 includes direct references from the DSAS user guide by Himmelstoss et al. (2018).
 
 **WARNING**. The Coastsat code here has been altered, therefore the latest updates, issues and pull requests on Github may not be relevant to this workflow.
 
@@ -251,11 +255,11 @@ Task time = ~15mins (dependant on size/complexity of study area)
     4. Check the box Add source information to output
 3.	DSAS requires a date field formatted as mm/dd/yyyy. If using yearly composite, maintain same day and month.
     1. Calculate field 
-    2. New field = ‘date_shrt’
+    2. New field = ‘date_long’
     3. Use the following expression:
         1. If individual date (original coastsat output) use:
         ```diff
-        Date_shrt = reclass(!date!)
+        date_long = reclass(!date!)
         Code Block:
         def reclass(date):
             yyyy = date[:-15]
@@ -267,7 +271,7 @@ Task time = ~15mins (dependant on size/complexity of study area)
         ```
         2. If median composite use:
         ```diff
-        Date_shrt = reclass(!date!)
+        date_long = reclass(!date!)
         Code Block:
         def reclass(date):
             yyyy = str(int(date))
