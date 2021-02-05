@@ -93,8 +93,10 @@ The jupyter notebook is where you can customise the processing to your needs. He
 There are additional parameters (`min_beach_size`, `buffer_size`, `min_length_sl`, `cloud_mask_issue` and `sand_color`) that can be tuned to optimise the shoreline detection in a specific area.
 
 
-### 3.1 Create a coordinate list of regions of interest at study site - already got a set of coordinates? [Move to section 3.3](https://github.com/sac3g15/coastsat_noc#33begin-processing)
-**Coordinates are in the form; top left, top right, bottom right, bottom left, top left**
+### 3.1 Create a coordinate list of regions of interest at study site
+
+**Already got a set of coordinates? [Move to section 3.3](https://github.com/sac3g15/coastsat_noc#33begin-processing) - Coordinates are in the form; top left, top right, bottom right, bottom left, top left**
+
 This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis, likewise, the user can digitise ROI's (smaller than 100km2) instead of following the code below.
 
 ```diff
