@@ -86,6 +86,7 @@ The jupyter notebook is where you can customise the processing to your needs. He
 
 4. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
 5. `Settings`: Some of the settings mimic the original
+
     **General Parameters:**
 
     1. `Output_epsg` =  Country-specific coordinate system (see https://epsg.io/)
@@ -105,7 +106,7 @@ The jupyter notebook is where you can customise the processing to your needs. He
 
     **Co-registration:**
 
-    9. `coregistration`: True,
+    9. `coregistration` = Co-register Landsat images to Sentinel 2
 
     **Image Download Parameters:**
 
