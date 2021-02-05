@@ -853,7 +853,8 @@ def retrieve_images(inputs, settings):
         filename_txt = im_fn[''].replace('.tif','')
         metadict = {'filename':im_fn[''],
                     'epsg':metadata['bands'][0]['crs'][5:],
-                    'dates': str(year),
+                    'start_date': inputs['dates'][0],
+                    'end_date': inputs['dates'][1],
                     'median_no': sum_img} 
   
     
@@ -929,7 +930,8 @@ def retrieve_images(inputs, settings):
         filename_txt = im_fn[''].replace('.tif','')
         metadict = {'filename':im_fn[''],
                     'epsg':metadata['bands'][0]['crs'][5:],
-                    'dates': str(year),
+                    'start_date': inputs['dates'][0],
+                    'end_date': inputs['dates'][1],
                     'median_no': sum_img} 
   
     # Landsat 8 download                
@@ -1012,7 +1014,8 @@ def retrieve_images(inputs, settings):
         filename_txt = im_fn[''].replace('.tif','')
         metadict = {'filename':im_fn[''],
                     'epsg':metadata['bands'][0]['crs'][5:],
-                    'dates': str(year),
+                    'start_date': inputs['dates'][0],
+                    'end_date': inputs['dates'][1],
                     'median_no': sum_img} 
   
         # Sentinel 2 download                
@@ -1082,10 +1085,25 @@ def retrieve_images(inputs, settings):
        #metadata for .txt file
         filename_txt = im_fn[''].replace('.tif','')
         metadict = {'filename':im_fn[''],
-                    'epsg': metadata['bands'][0]['crs'][5:],
-                    'dates': str(year),
-                    'median_no': sum_img } 
-  
+                    'epsg':metadata['bands'][0]['crs'][5:],
+                    'start_date': inputs['dates'][0],
+                    'end_date': inputs['dates'][1],
+                    'median_no': sum_img
+                    
+                    #'LCloudScore': settings['LCloudScore'],         # Mean cloud score threshold (include images with less then threshold)
+                    #'add_L7_to_L5': settings['add_L7_to_L5'],       # Add Landsat 7 to Landsat 5 median composite if they are in same time period
+                    #'add_L5_to_L7': settings['add_L5_to_L7'],       # Add Landsat 5 to Landsat 7 median composite if they are in same time period
+                    #'add_L7_to_L8': settings['add_L7_to_L8'],       # Add Landsat 7 to Landsat 8 median composite if they are in same time period
+                    #'LCloudThreshold': settings['LCloudThreshold'], # Pixels from a single image in a collection larger than this cloud score threshold
+                    #                                                # will be masked.
+                    ## Sentinel
+                    #'CLOUD_FILTER': settings['CLOUD_FILTER'],       # [Integer] Maximum image cloud cover percent allowed in image collection'
+                    #'CLD_PRB_THRESH': settings['CLD_PRB_THRESH'],   # {Integer] Cloud probability (%); values greater than are considered cloud
+                    #'NIR_DRK_THRESH': settings['NIR_DRK_THRESH'],   # [Float] Near-infrared reflectance; values less than are considered potential cloud shadow
+                    #'CLD_PRJ_DIST': settings['CLD_PRJ_DIST'],       # [Float] Maximum distance (km) to search for cloud shadows from cloud edges |
+                    #'BUFFER': settings['BUFFER']
+                    } 
+          
     # write metadata
     with open(os.path.join(filepaths[0],filename_txt + '.txt'), 'w') as f:
           for key in metadict.keys():
@@ -1229,7 +1247,7 @@ def get_metadata(inputs):
         # if a folder has been created for the given satellite mission
         if sat_list in os.listdir(filepath):
             # update the metadata dict
-            metadata[sat_list] = {'filenames':[], 'epsg':[], 'dates':[], 'median_no':[]}
+            metadata[sat_list] = {'filenames':[], 'epsg':[], 'start_date':[], 'end_date':[], 'median_no':[]}
             # directory where the metadata .txt files are stored
             filepath_meta = os.path.join(filepath, sat_list, 'meta')
             # get the list of filenames and sort it chronologically
@@ -1238,18 +1256,20 @@ def get_metadata(inputs):
             # loop through the .txt files
             for im_meta in filenames_meta:
                 # read them and extract the metadata info: filename, number of images in median
-                # epsg code and date
+                # epsg code and dates
                 with open(os.path.join(filepath_meta, im_meta), 'r') as f:
                     filename = f.readline().split('\t')[1].replace('\n','')
                     epsg = int(f.readline().split('\t')[1].replace('\n',''))
-                    dates = int(f.readline().split('\t')[1].replace('\n',''))
+                    start_date = f.readline().split('\t')[1].replace('\n','')
+                    end_date = f.readline().split('\t')[1].replace('\n','')
                     median_no = int(f.readline().split('\t')[1].replace('\n',''))
                     
                 # store the information in the metadata dict
                 metadata[sat_list]['filenames'].append(filename)
                 metadata[sat_list]['median_no'].append(median_no)
                 metadata[sat_list]['epsg'].append(epsg)
-                metadata[sat_list]['dates'].append(dates)
+                metadata[sat_list]['start_date'].append(start_date)
+                metadata[sat_list]['end_date'].append(end_date)
                 
     # save a .pkl file containing the metadata dict
     with open(os.path.join(filepath, inputs['sitename'] + '_metadata' + '.pkl'), 'wb') as f:
