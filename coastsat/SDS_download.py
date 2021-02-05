@@ -145,7 +145,7 @@ def get_s2_sr_cld_col(aoi, start_date, end_date, CLOUD_FILTER):
     user_end = start_date.split("-")
     # Period of Sentinel 2 data before Surface reflectance data is available
     start = datetime(2015, 6, 23)
-    end = datetime(2017, 3, 28)                    
+    end = datetime(2019, 1, 28)                    
 
     # Is end date within pre S2_SR period?
     if time_in_range(start, end, datetime(int(user_end[0]), int(user_end[1]), int(user_end[2]))) == False:
@@ -682,9 +682,9 @@ def obtain_image_median(collection, time_range, area, satname, settings):
             user_end = time_range[0].split("-")
             # Period of Sentinel 2 data before Surface reflectance data is available
             start = datetime(2015, 6, 23)
-            end = datetime(2017, 3, 28)                    
+            end = datetime(2019, 1, 28)                    
 
-            # Is end date within pre S2_SR period?
+            # Is start date within pre S2_SR period?
             if time_in_range(start, end, datetime(int(user_end[0]), int(user_end[1]), int(user_end[2]))) == False:
                                    # Add cloud shadow component bands.
                                    img_cloud_shadow = add_shadow_bands(img_cloud)
