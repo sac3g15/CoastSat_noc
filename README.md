@@ -19,12 +19,11 @@ Example applications and accuracy of the resulting satellite-derived shorelines 
 
 Section 2 includes instructions written by Vos et al. (2019).
 
-If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.
-
 Extensions to this toolbox:
 - [Cleaning shoreline output + Shoreline Change using DSAS](https://github.com/sac3g15/coastsat_noc/blob/main/clean_DSAS_models_README.md) - direct references from the DSAS user guide by Himmelstoss et al. (2018).
 
 **WARNING**. The Coastsat code here has been altered, therefore the latest updates, issues and pull requests on the Coastsat Github page may not be relevant to this workflow.
+**If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
 
 ### Acknowledgements
 Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repository. Also, thanks to USGS for providing the open-sourced Digital Shoreline Analysis System plug-in. Both provide the basis for this workflow which would not exist without it. 
@@ -47,7 +46,7 @@ Previously, our understanding of shoreline dynamics was limited to single photog
 - Erosion Areas
 - Accretion Areas
 
-![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/Coastsat_nocs_outline.png "Coastsat_nocs outline")
+![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/coastsat_noc_workflow.png "Coastsat_nocs outline")
 
 
 ## LIMITATIONS
@@ -218,7 +217,7 @@ A breakdown of the processes in the models is given in the below for clarity, un
 
 This error is caused by a lack of images in the Landsat/Sentinel collection for the Co-registration process, after refining the cloud cover and date (i.e. within a 2 month window) . Simply change the date into another year, or raise the maximum cloud cover % in the SDS_download file in the Coastsat folder. Change this under the function ‘Landsat_coregistration’ for the variable ‘dated’. For example, change “L8_reference = .filterDate('2017-01-01', '2018-01-01')” to “L8_reference = .filterDate('2018-01-01', '2019-01-01')” AND do the same for Sentinel-2 9 lines below.
 
-#### Comment on Co-registration ####
+## Comment on Co-registration
 
 Depedant on the loction, there can be a miss alignment (or miss registration) between L8 and S2 images, which varies geographically and can exceed 38 meters [Storey et al., 2016]. It is mainly due to the residual geolocation errors in the Landsat framework which based upon the Global Land Survey images. Despite implementing a co-registration process, there are occasionally differences between shorelines between Landsat and Sentinel-2 images. Whilst local ‘rubber sheet’ deformations were used to match images from the two satellites, further interrogation of the offset images showed that the offset images used to co-register the images greatly depends on the images used in the analysis, i.e. Offset values from a two-month period in 2016 are not similar to those produced in the same two-month period in 2017. The explanation for this different is unknown at the time of this report.  It was deemed suitable to maintaining this co-registration process despite occasional improper warping to minimise the difference between Landsat and Sentinel shorelines. A further enquiry into the processes within the function displacement and displace is needed to understand the how this is affecting the co-registration between the images. Satellite mapping of shorelines is generally accurate to 10m (ref USGS), this is indicative of the uncertainties in the processing. There are continued efforts to provide a more detailed quantification of the uncertainties within the co-registration process and median composites outside this report.
 
