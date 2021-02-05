@@ -805,8 +805,8 @@ def extract_shorelines(metadata, settings, inputs):
                     continue
 
             # append to output variables
-            output_start_time.append(inputs['dates'][0])
-            output_end_time.append(inputs['dates'][1])
+            output_start_time.append(metadata[satname]['start_date'][i])
+            output_end_time.append(metadata[satname]['end_date'][i])
             output_shoreline.append(shoreline)
             output_filename.append(filenames[i])
             output_median_no.append(metadata[satname]['median_no'][i])
