@@ -50,7 +50,7 @@ Previously, our understanding of shoreline dynamics was limited to single photog
 
 
 ## LIMITATIONS
-Landsat / Sentinel co-registration issue - The option for cor-egistration between the satellites has been set up within the code. However, the GEE functions displace() and displacement() to perform co-registration have proved inconsistent in preliminary studies, therefore the interpretation results should be taken carefully. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here](#Comment-on-Co-registration "Goto Comment-on-Co-registration")
+Landsat / Sentinel co-registration issue - The option for co-registration between the satellites has been set up within the code. However, the GEE functions displace() and displacement() to perform co-registration have proved inconsistent in preliminary studies, therefore the interpretation results should be taken carefully. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here](#Comment-on-Co-registration "Goto Comment-on-Co-registration")
 
 Cloud persistance - In cloud presistant areas and where there are few images in the median collection (count can be found in 'median_no' in shoreline attribute table), clouds can remain in the image. Due to their spectral similarity to sand, some false shorelines can be delineated.
 
