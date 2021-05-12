@@ -803,12 +803,18 @@ def retrieve_images(inputs, settings):
                                          ee.Geometry.Polygon(inputs['polygon']),inputs['sat_list'], settings)
       
         print('Median Processed')                 
+
         #extract year
-        first_date = inputs["dates"][0]
-        year = first_date[:-6]
+        start_date = inputs["dates"][0]
+        end_date = inputs["dates"][1]
+        year = start_date[:-6]
+
+        #remove dashes in dates
+        start = str(start_date.replace('-', ''))
+        end = str(end_date.replace('-', ''))        
         
         im_fn = dict([])
-        im_fn[''] = 'L5' + '_' + inputs['sitename'] + '_median_' + year + suffix 
+        im_fn[''] = 'L5' + '_' + inputs['sitename'] + '_median_' + "S" + start + "_E" + end + suffix 
         # if two images taken at the same date add 'dup' to the name (duplicate)
         if any(im_fn[''] in _ for _ in all_names):
             im_fn[''] = 'L5' + '_' + inputs['sitename'] + '_dup' + suffix
@@ -872,12 +878,18 @@ def retrieve_images(inputs, settings):
                                          settings)
         
         print('Median Processed')                 
+       
         #extract year
-        first_date = inputs["dates"][0]
-        year = first_date[:-6]
+        start_date = inputs["dates"][0]
+        end_date = inputs["dates"][1]
+        year = start_date[:-6]
+
+        #remove dashes in dates
+        start = str(start_date.replace('-', ''))
+        end = str(end_date.replace('-', ''))
         
         im_fn = dict([])
-        im_fn[''] = 'L7' + '_' + inputs['sitename'] + '_median_' + year + suffix 
+        im_fn[''] = 'L7' + '_' + inputs['sitename'] + '_median_' + "S" + start + "_E" + end + suffix 
         # if two images taken at the same date add 'dup' to the name (duplicate)
         if any(im_fn[''] in _ for _ in all_names):
             im_fn[''] = 'L7' + '_' + inputs['sitename'] + '_dup' + suffix
@@ -947,12 +959,18 @@ def retrieve_images(inputs, settings):
                                          settings)
         
         print('Median Processed')                 
+        
         #extract year
-        first_date = inputs["dates"][0]
-        year = first_date[:-6]
+        start_date = inputs["dates"][0]
+        end_date = inputs["dates"][1]
+        year = start_date[:-6]
+
+        #remove dashes in dates
+        start = str(start_date.replace('-', ''))
+        end = str(end_date.replace('-', ''))
         
         im_fn = dict([])
-        im_fn[''] = 'L8' + '_' + inputs['sitename'] + '_median_' + year + suffix 
+        im_fn[''] = 'L8' + '_' + inputs['sitename'] + '_median_' + "S" + start + "_E" + end + suffix 
         # if two images taken at the same date add 'dup' to the name (duplicate)
         if any(im_fn[''] in _ for _ in all_names):
             im_fn[''] = 'L8' + '_' + inputs['sitename'] + '_dup' + suffix
@@ -1032,11 +1050,16 @@ def retrieve_images(inputs, settings):
         print('Median processed')
           
         #extract year
-        first_date = inputs["dates"][0]
-        year = first_date[:-6]
+        start_date = inputs["dates"][0]
+        end_date = inputs["dates"][1]
+        year = start_date[:-6]
+
+        #remove dashes in dates
+        start = str(start_date.replace('-', ''))
+        end = str(end_date.replace('-', ''))
         
         im_fn = dict([])
-        im_fn[''] = 'S2' + '_' + inputs['sitename'] + '_median_' + year + suffix 
+        im_fn[''] = 'S2' + '_' + inputs['sitename'] + '_median_' + "S" + start + "_E" + end + suffix 
         # if two images taken at the same date add 'dup' to the name (duplicate)
         if any(im_fn[''] in _ for _ in all_names):
             im_fn[''] = 'S2' + '_' + inputs['sitename'] + '_dup' + suffix
@@ -1262,6 +1285,10 @@ def get_metadata(inputs):
                     epsg = int(f.readline().split('\t')[1].replace('\n',''))
                     start_date = f.readline().split('\t')[1].replace('\n','')
                     end_date = f.readline().split('\t')[1].replace('\n','')
+                    
+                    text = (f.readline().split('\t').replace('\n',''))
+                    print (text)
+                    
                     median_no = int(f.readline().split('\t')[1].replace('\n',''))
                     
                 # store the information in the metadata dict
