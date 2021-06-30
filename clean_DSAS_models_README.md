@@ -59,7 +59,7 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
         ```
         2. If median composite use:
         ```diff
-        Date_shrt = reclass(date_start)
+        Date_shrt = reclass(!date_start!)
         Code Block:
         def reclass(date):
             yyyy = date[:-6]
