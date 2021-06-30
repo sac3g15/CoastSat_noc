@@ -47,7 +47,7 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
     3. Use the following expression:
         1. If individual date (original coastsat output) use:
         ```diff
-        Date_shrt = reclass(!date!)
+        Date_shrt = reclass(!date_start!)
         Code Block:
         def reclass(date):
             yyyy = date[:-15]
@@ -59,12 +59,14 @@ Task time = ~2 mins (+ ~5 mins processing time per 100km2 zone)
         ```
         2. If median composite use:
         ```diff
-        Date_shrt = reclass(!date!)
+        Date_shrt = reclass(!date_start!)
         Code Block:
         def reclass(date):
-            yyyy = str(int(date))
-            mm = "01"
-            dd = "01"
+            yyyy = date[:-6]
+            mm = date[5:7]
+            mm2 = mm[:]
+            dd = date[8:10]
+            dd2 = dd[-2:]
             return mm + "/" + dd + "/" + yyyy
         ```
 4.	Select by attributes. Year = 2000 (or earliest year shoreline).
