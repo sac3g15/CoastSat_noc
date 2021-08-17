@@ -3,14 +3,13 @@
 CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 5, 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
 
 Coastsat_nocs has branched from coastsat with the intention of producing large-scale shoreline change analysis. The following changes have been made:
-* Retrieve median composites of satellite data - I.e. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
+* Retrieve median composites of satellite data - E.g. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
 * The user can loop through multiple study areas rather than a single polygon
 * Multiple date ranges (+ satellites) can be specified
 * Landsat collections can be merged to increase the number of images used in the median
 * Improved cloud masking process using Landsat Cloud Score and the Sentinel 2 Cloud Probabiity layer
 * Automated shoreline cleaning models
 * Instructions for shoreline change rate and forecasting (10- and 20-Year) using Digital Shoreline Analysis System (DSAS) - ArcMap plug-in.
-* A co-registration process - **Performance not validated and is inconsistent - users encouraged to visualise differences between Landsat and Sentinel 2 before proceeding with calculating change between them** 
 
 The underlying approach of the CoastSat toolkit are described in detail in:
 * Vos K., Splinter K.D., Harley M.D., Simmons J.A., Turner I.L. (2019). CoastSat: a Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. *Environmental Modelling and Software*. 122, 104528. https://doi.org/10.1016/j.envsoft.2019.104528
@@ -22,8 +21,7 @@ Section 2 includes instructions written by Vos et al. (2019).
 Extensions to this toolbox:
 - [Cleaning shoreline output + Shoreline Change using DSAS](https://github.com/sac3g15/coastsat_noc/blob/main/clean_DSAS_models_README.md) - direct references from the DSAS user guide by Himmelstoss et al. (2018).
 
-**WARNING**. The Coastsat code here has been altered, therefore the latest updates, issues and pull requests on the Coastsat Github page may not be relevant to this workflow.
-**If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
+**WARNING**. Coastsat_nocs was developed with version CoastSat v1.0.1 code, therefore some new functions are not compatible with the nocs modules. **If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
 
 ### Acknowledgements
 Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repository. Also, thanks to USGS for providing the open-sourced Digital Shoreline Analysis System plug-in. Both provide the basis for this workflow which would not exist without it. 
@@ -31,7 +29,7 @@ Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repo
 
 ### Description
 
-This document provides a user guide to mapping shoreline change rates and forecast future shorelines (over a 10- and 20-year period. Example products can be viewed/downloaded via the [EO4SD data portal](http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. 
+This document provides a user guide to mapping shoreline change rates and forecast future shorelines (over a 10- and 20-year period). Example products can be viewed/downloaded via the [EO4SD data portal](http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. 
 
 Previously, our understanding of shoreline dynamics was limited to single photogrammetry or in-situ beach sampling. Satellites have greatly enhanced our ability to measure coastal change over large areas and short periods. This has changed our approach from ground-based methods such as measuring the movement of morphological features (e.g. the edge of a cliff) or measuring the height of volume changes in the coastal zone (e.g. 3D mapping horizontal to the coast). Thanks to free, open-sourced tools by Vos et al. (2019) and Himmelstoss et al. (2018), large scale shoreline analysis can be carried out quickly. 
 
@@ -50,11 +48,11 @@ Previously, our understanding of shoreline dynamics was limited to single photog
 
 
 ## LIMITATIONS
-Landsat / Sentinel co-registration issue - The option for co-registration between the satellites has been set up within the code. However, the GEE functions displace() and displacement() to perform co-registration have proved inconsistent in preliminary studies, therefore the interpretation results should be taken carefully. GEE documents are relatviely unclear on the exact methods of the functions used to coregister images, but we are working on this issue. More details [here](#Comment-on-Co-registration "Goto Comment-on-Co-registration")
+Landsat / Sentinel co-registration issue - It is recommended that the same satellite series is used to monitor change over time, as there are differences in the referencing system between the two. This can result in differences of over a pixel (30m) between two images of the same area. We are working on a solution using GEE coregistration tools. 
 
 Cloud persistance - In cloud presistant areas and where there are few images in the median collection (count can be found in 'median_no' in shoreline attribute table), clouds can remain in the image. Due to their spectral similarity to sand, some false shorelines can be delineated.
 
-Data gaps in Landat 7 - Despite median temporal filtering, as a result as a result of the data gap in Landsat 7, some images produce broken lines along the shore. Therefore, when extracting the baseline, some areas fail to have a baseline recording. I often fill these gaps by manually filling in the next closest (time) shoreline.
+Data gaps in Landat 7 - Despite median temporal filtering, as a result as a result of the data gap in Landsat 7, some images produce broken lines along the shore. These can be filled by merging with Landsat 5 and 8, but gaps can remain in areas with limited satellite imagery.
 
 
 ## 1. Installation
@@ -75,24 +73,21 @@ A Jupyter Notebook combines formatted text and code. To run the code, place your
 ### 3. Retrieval of the satellite images - Process shoreline mapping tool
 The jupyter notebook is where you can customise the processing to your needs. Here, we use an example in Senegal. The  - i.e. boundaries of study area and time, the following variables are required:
 
-1. `Coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
-2. `All_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
-3. `All_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections).
+1. `coordinate_List`- list of the coordinates of the region of interest (longitude/latitude pairs in WGS84) - see below for an example of how to extract ROI coordinates
+2. `all_dates` - dates over which the images will be retrieved (e.g., `dates = ['2017-12-01', '2018-01-01']`)
+3. `all_sats`: satellite missions to consider (e.g., `sat_list = ['L7', 'L8', 'S2']` for Landsat 7, 8 and Sentinel-2 collections).
 
         FYI.    Landsat 5 = 1984-01-01 - 2012-05-05 (Limited Coverage in some areas)
                 Landsat 7 = January 1999 - Present
                 Landsat 8 = April 2013 - Present
                 Sentinel 2 = 2015-06-23 – Present
 
-4. `Sitename`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
-5. `Settings`: Some of the settings mimic the original
+4. `study_area`: name of the site (this is the name of the subfolder where the images and other accompanying files will be stored)
+5. `settings`: Some of the settings mimic the original
 
-    **General Parameters:**
-
+    **General Parameters and Quality Control:**
+    
     1. `Output_epsg` =  Country-specific coordinate system (see https://epsg.io/)
-
-    **Quality Control:**
-
     2. `check_detection` = if True, shows each shoreline detection to the user for validation
     3. `save_figure` = if True, saves a figure showing the mapped shoreline for each image
 
@@ -130,7 +125,11 @@ The jupyter notebook is where you can customise the processing to your needs. He
 
 **Already got a set of coordinates? [Move to section 3.3](https://github.com/sac3g15/coastsat_noc#33begin-processing) - Coordinates are in the form; top left, top right, bottom right, bottom left, top left**
 
-This section demonstrates a simple way to create a coordinate list of a study area needed for the code above. It creates boxes around the coastline which are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis, likewise, the user can digitise ROI's (smaller than 100km2) instead of following the code below.
+This section demonstrates a couple of simple ways to create a coordinate list of a study area needed for the code above.
+
+Firstly, if looking at a single or small number of areas, you can use the [following website](http://geojson.io/#map=2/20.0/0.0) to produce coordinates through a JSON file. Simply copy the coordinates after drawing a box in a region of interest. Then ensure the formatting is the same as that in the jupyter notebook.
+
+The second method uses ArcGIS to develop a series of boxes along the coast. These are used as the limits to download a subset of satellite images. The coastline can be manually delineated if a small study area is here a country-scale analysis, likewise, the user can digitise ROI's (smaller than 100km2) instead of following the code below.
 
 ```diff
 ! Note:: Google earth Engine has a limited image size of ~100km2 which can be downloaded at a single time.
