@@ -1269,7 +1269,7 @@ def get_metadata(inputs):
     for sat_list in ['L5','L7','L8','S2']:
         # if a folder has been created for the given satellite mission
         if sat_list in os.listdir(filepath):
-            # update the metadata dict
+            # update the metadata dictd
             metadata[sat_list] = {'filenames':[], 'epsg':[], 'start_date':[], 'end_date':[], 'median_no':[]}
             # directory where the metadata .txt files are stored
             filepath_meta = os.path.join(filepath, sat_list, 'meta')
@@ -1286,8 +1286,8 @@ def get_metadata(inputs):
                     start_date = f.readline().split('\t')[1].replace('\n','')
                     end_date = f.readline().split('\t')[1].replace('\n','')
                     
-                    text = (f.readline().split('\t').replace('\n',''))
-                    print (text)
+                    #text = (f.readline().split('\t').replace('\n',''))
+                    #print (text)
                     
                     median_no = int(f.readline().split('\t')[1].replace('\n',''))
                     
