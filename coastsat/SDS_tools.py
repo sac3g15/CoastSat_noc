@@ -146,7 +146,7 @@ def convert_epsg(points, epsg_in, epsg_out):
     if type(points) is list:
         points_converted = []
         # iterate over the list
-        for i, arr in enumerate(points): 
+        for i, arr in enumerate(points):
             points_converted.append(np.array(coordTransform.TransformPoints(arr)))
     # if single array
     elif type(points) is np.ndarray:
