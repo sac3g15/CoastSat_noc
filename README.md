@@ -3,7 +3,7 @@
 CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 5, 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
 
 Coastsat_nocs has branched from coastsat with the intention of producing large-scale shoreline change analysis. The following changes have been made:
-* Retrieve median composites of satellite data - E.g. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
+* Summarise a time period of satellite data. Retrieve median composites of satellite data - E.g. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
 * The user can loop through multiple study areas rather than a single polygon
 * Multiple date ranges (+ satellites) can be specified
 * Landsat collections can be merged to increase the number of images used in the median
@@ -86,7 +86,7 @@ The jupyter notebook is where you can customise the processing to your needs. He
 5. `settings`: Some of the settings mimic the original
 
     **General Parameters and Quality Control:**
-    
+
     1. `Output_epsg` =  Country-specific coordinate system (see https://epsg.io/)
     2. `check_detection` = if True, shows each shoreline detection to the user for validation
     3. `save_figure` = if True, saves a figure showing the mapped shoreline for each image
@@ -255,7 +255,7 @@ This error is caused by a lack of images in the Landsat/Sentinel collection for 
 
 ## Comment on Co-registration
 
-Depedant on the loction, there can be a miss alignment (or miss registration) between L8 and S2 images, which varies geographically and can exceed 38 meters [Storey et al., 2016]. It is mainly due to the residual geolocation errors in the Landsat framework which based upon the Global Land Survey images. Despite implementing a co-registration process, there are occasionally differences between shorelines between Landsat and Sentinel-2 images. Whilst local ‘rubber sheet’ deformations were used to match images from the two satellites, further interrogation of the offset images showed that the offset images used to co-register the images greatly depends on the images used in the analysis, i.e. Offset values from a two-month period in 2016 are not similar to those produced in the same two-month period in 2017. The explanation for this different is unknown at the time of this report.  It was deemed suitable to maintaining this co-registration process despite occasional improper warping to minimise the difference between Landsat and Sentinel shorelines. A further enquiry into the processes within the function displacement and displace is needed to understand the how this is affecting the co-registration between the images. Satellite mapping of shorelines is generally accurate to 10m (ref USGS), this is indicative of the uncertainties in the processing. There are continued efforts to provide a more detailed quantification of the uncertainties within the co-registration process and median composites outside this report.
+Depedant on the loction, there can be a mis-alignment (or mis-registration) between L8 and S2 images, which varies geographically and can exceed 38 meters [Storey et al., 2016]. It is mainly due to the residual geolocation errors in the Landsat framework which based upon the Global Land Survey images. 
 
 Still having a problem? Post an issue in the [Issues page](https://github.com/sac3g15/coastsat_noc/issues) (please do not email).
 
@@ -274,3 +274,4 @@ Landsat Cloud Mask Cloud Score = 25, less than that, sand gets scored highly and
 - Vos, K., Splinter, K.D., Harley, M.D., Simmons, J.A. and Turner, I.L., 2019a. Coastsat: A Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. Environmental Modelling & Software, 122, p.104528.
 
 
+S
