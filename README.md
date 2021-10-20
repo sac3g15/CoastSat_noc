@@ -1,17 +1,21 @@
 # CoastSat_nocs
 
-CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
+CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019 and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
 
-Coastsat_nocs has branched from coastsat with the intention of producing large-scale shoreline change analysis. The following changes have been made:
-* Summarise a time period of satellite data. Retrieve median composites of satellite data - E.g. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
+Coastsat_nocs has branched from coastsat with the intention of making long term, large scale analysis of shoreline change analysis possible. The code was branched from the original as part of the Earth Observation for Sustainable Development project, where an estimation of shoreline change rates were needed, without access to accurate and local tide guage information. For information on the project can be [found here](https://eo4sd-marine.eu/). 
+
+The following changes have been made:
+* Create shorelines from a median composite of data over a defined time period of satellite data. E.g. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
 * The user can loop through multiple study areas rather than a single polygon
-* Multiple date ranges (+ satellites) can be specified
+* Multiple date ranges (+ satellites) can be specified **But** be aware of Landsat and Sentinel-2 satellites which may be mis-aligned. To make comparisons between shorelines created from different collections required a co-registration step.
 * Landsat collections can be merged to increase the number of images used in the median
-* Improved cloud masking process using Landsat Cloud Score and the Sentinel 2 Cloud Probabiity layer
-* Automated shoreline cleaning models
+* A cloud masking process has been introduced before taking a median, using Landsat Cloud Score and the Sentinel 2 Cloud Probabiity layer
+
+**Post-analysis**
+* Automated ArcGIS model builder shoreline cleaning models
 * Instructions for shoreline change rate and forecasting (10- and 20-Year) using Digital Shoreline Analysis System (DSAS) - ArcMap plug-in.
 
-**WARNING**. We have experienced issues with processing shorelines from Landsat 5 satellites (unless they are merged with Landsat 7). Coastsat_nocs was developed with version CoastSat v1.0.1 code, therefore some new functions are not compatible with the nocs modules. **If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
+**WARNING**. We have experienced issues with processing shorelines from Landsat 5 satellites (unless they are merged with Landsat 7). Also, Coastsat_nocs was developed with version CoastSat v1.0.1 code, therefore some new functions are not avaliable with the nocs modules. **If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
 
 The underlying approach of the CoastSat toolkit are described in detail in:
 * Vos K., Splinter K.D., Harley M.D., Simmons J.A., Turner I.L. (2019). CoastSat: a Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. *Environmental Modelling and Software*. 122, 104528. https://doi.org/10.1016/j.envsoft.2019.104528
@@ -29,7 +33,9 @@ Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repo
 
 ### Description
 
-This document provides a user guide to mapping shoreline change rates and forecast future shorelines (over a 10- and 20-year period). Example products can be viewed/downloaded via the [EO4SD data portal](http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. 
+This respository is split into two sections; (1) The creation of shorelines using median images and (2) Development of shoreline change statistics, forecasted rates and erosion/accretion rates using DSAS ArcMap Plugin. Both sections follow the method we used in the EO4SD project, which includes a variety of different softwares. The repository and methods here are open to disucssion and we welcome users to add code and offer suggestions to how we can make it more accessible to all users.
+
+Example products can be viewed/downloaded via the [EO4SD data portal](http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. 
 
 Previously, our understanding of shoreline dynamics was limited to single photogrammetry or in-situ beach sampling. Satellites have greatly enhanced our ability to measure coastal change over large areas and short periods. This has changed our approach from ground-based methods such as measuring the movement of morphological features (e.g. the edge of a cliff) or measuring the height of volume changes in the coastal zone (e.g. 3D mapping horizontal to the coast). Thanks to free, open-sourced tools by Vos et al. (2019) and Himmelstoss et al. (2018), large scale shoreline analysis can be carried out quickly. 
 
@@ -60,13 +66,13 @@ To run the examples you will need to install a new environment (to CoastSat). Th
 
 ## 2. Usage
 
-An example of how to run the software in a Jupyter Notebook is provided in the repository (`StudyArea_shoreline.ipyNote:`). To run this, first activate your `coastsat` environment with `conda activate coastsat` (if not already active), and then type:
+An example of how to run the software in a Jupyter Notebook is provided in the repository (`Coastsat_noc_example.ipyNote:`). To run this, first activate your `coastsat` environment with `conda activate coastsat` (if not already active), and then type:
 
 ```
 jupyter notebook
 ```
 
-A web browser window will open. Point to the directory where you downloaded this repository and click on `StudyArea_shoreline.ipyNote:`.
+A web browser window will open. Point to the directory where you downloaded this repository and click on `Coastsat_noc_example.ipyNote:`.
 
 A Jupyter Notebook combines formatted text and code. To run the code, place your cursor inside the first of the code section and click on the `run cell` button and progress forward, pause at the second code block (in grey)
 
@@ -90,8 +96,9 @@ The jupyter notebook is where you can customise the processing to your needs. He
     1. `Output_epsg` =  Country-specific coordinate system (see https://epsg.io/)
     2. `check_detection` = if True, shows each shoreline detection to the user for validation
     3. `save_figure` = if True, saves a figure showing the mapped shoreline for each image
+    4. `adjust_detection` = if True, allows user to manually adjust the detected shoreline
 
-    **[ONLY FOR ADVANCED USERS] Shoreline Detection Parameters:**
+    **Shoreline Detection Parameters:**
 
     4. `min_beach_area` = minimum area (in metres^2) for an object to be labelled as a beach
     5. `buffer_size`= radius (in metres) of the buffer around sandy pixels considered in the shoreline detection
@@ -101,7 +108,7 @@ The jupyter notebook is where you can customise the processing to your needs. He
 
     **Co-registration:**
 
-    9. `coregistration` = Co-register Landsat images to Sentinel 2
+    9. `coregistration` = Keep False, co-registration method here not effective at this stage
 
     **Image Download Parameters:**
 
@@ -120,6 +127,8 @@ The jupyter notebook is where you can customise the processing to your needs. He
     17. `NIR_DRK_THRESH` = Near-infrared reflectance; values less than are considered potential cloud shadow
     18. `CLD_PRJ_DIST`= Maximum distance (km) to search for cloud shadows from cloud edges
     19. `BUFFER` = Distance (m) to dilate the edge of cloud-identified objects
+
+6. The final setting is the download. True, download the images (runs the section below). False = stops the download below (in case the images have already been downloaded)
 
 ### 3.1 Create a coordinate list of regions of interest at study site
 
@@ -227,17 +236,17 @@ A breakdown of the processes in the models is given in the below for clarity, un
 
 
 ### 3.3	Begin processing
-1. Open Jupyter Notebook (following instructions in ‘Usage’), if not already open, and navigate to `StudyArea_shoreline.ipyNote:`
-2. Hit run on the initial settings and the edited code after “1. Retrieval of the images from GEE”
+1. Open Jupyter Notebook (following instructions in ‘Usage’), if not already open, and navigate to `Coastsat_noc_example.ipyNote:`
+2. Ensure your appropriate settings have been changed.
+3. Find the kernel button on the toolbar and 'Restart & Run All'
 3. After a few minutes of processing, navigate to the data folder in Coastsat_master. Find the output. geojson file and export to software to ensure the correct output is viewed.
 
 ```diff
 ! Note: The following shows a common error:
 !   ‘HTTPError: HTTP Error 500: Internal Server Error’.
 ! This is due to a network error with Google Earth Engine which is caused by a timeout using
-! the getDownloadURL function – looking into this issue. This error can be frequent, and occurs
-! less frequently during evenings (GMT). If this occurs:
-!   i.	Find number of folders in C:\Coastsat_master\data. E.g. Tunisia_ 27.
+! If this occurs:
+!   i.	Find number of folders in C:\Coastsat_master\data. E.g. NARRA_ 27.
 !   ii.	Remove last folder (as shorelines haven’t been created for this folder). I.e. Delete Tunisia_27
 !   iii. Cut and paste the first 26 ROIs. I keep them in code and comment them out
 !   iv.	In the For loop, change sitename to “Sitename = counter + 27 “
