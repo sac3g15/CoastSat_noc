@@ -29,7 +29,7 @@ from pylab import ginput
 import pickle
 
 # CoastSat modules
-from coastsat import SDS_tools, SDS_preprocess
+from coastsat import SDS_tools, SDS_preprocess, NOC_tools
 
 np.seterr(all='ignore') # raise/ignore divisions by 0 and nans
 
@@ -831,7 +831,7 @@ def extract_shorelines(metadata, settings, inputs):
         plt.close()
 
     # change the format to have one list sorted by date with all the shorelines (easier to use)
-    output = SDS_tools.merge_output(output)
+    output = NOC_tools.merge_output(output)
 
     # save outputput structure as output.pkl
     filepath = os.path.join(filepath_data, sitename)
@@ -839,7 +839,7 @@ def extract_shorelines(metadata, settings, inputs):
         pickle.dump(output, f)
 
     # save output into a gdb.GeoDataFrame
-    gdf = SDS_tools.output_to_gdf(output)
+    gdf = NOC_tools.output_to_gdf(output)
     # set projection
     gdf.crs = {'init':'epsg:'+str(settings['output_epsg'])}
     # save as geojson
