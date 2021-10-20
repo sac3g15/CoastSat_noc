@@ -35,7 +35,7 @@ Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repo
 
 This respository is split into two sections; (1) The creation of shorelines using median images and (2) Development of shoreline change statistics, forecasted rates and erosion/accretion rates using DSAS ArcMap Plugin. Both sections follow the method we used in the EO4SD project, which includes a variety of different softwares. The repository and methods here are open to disucssion and we welcome users to add code and offer suggestions to how we can make it more accessible to all users.
 
-Example products can be viewed/downloaded via the [EO4SD data portal](http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. 
+Example products can be viewed/downloaded via the [EO4SD data portal](http://eo4sd.brockmann-consult.de/), which contains all datasets produced within the project. More details can be viewed on our [ArcGIS StoryMap](https://storymaps.arcgis.com/stories/448768ac164a4e5d92e8143ba7ad7f98)
 
 Previously, our understanding of shoreline dynamics was limited to single photogrammetry or in-situ beach sampling. Satellites have greatly enhanced our ability to measure coastal change over large areas and short periods. This has changed our approach from ground-based methods such as measuring the movement of morphological features (e.g. the edge of a cliff) or measuring the height of volume changes in the coastal zone (e.g. 3D mapping horizontal to the coast). Thanks to free, open-sourced tools by Vos et al. (2019) and Himmelstoss et al. (2018), large scale shoreline analysis can be carried out quickly. 
 
