@@ -3,7 +3,8 @@ The output of the Coastsat_nocs tool produces a uncleaned product for each year 
 
 **This file contains direct references from the DSAS user guide by Himmelstoss et al. (2018).**
 
-![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/Cleaning_process_GitHub.JPG "Cleaning Process")
+![picture alt](https://storage.googleapis.com/eo4sd-271513.appspot.com/Help%20Guides/Github_images/Cleaning_overview_GitHub.JPG "Cleaning Process")
+
 
 ### 4. Clean and clip shorelines
 #### 4.1 Define Shoreline Cleaning Variables and clean shorelines ####
