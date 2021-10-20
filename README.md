@@ -1,6 +1,6 @@
 # CoastSat_nocs
 
-CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 5, 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
+CoastSat_nocs is an open-source software toolkit written in Python that enables users to obtain shoreline change statistics and forecasts at any sandy coastline worldwide using Landsat 7, 8 and Sentinel-2. This is a toolkit is that has been modified from coastsat - an [open sourced code](https://github.com/kvos/CoastSat) by Vos et al., 2019  and uses [DSAS shoreline analysis](https://www.usgs.gov/centers/whcmsc/science/digital-shoreline-analysis-system-dsas) plug-in in ArcMap.
 
 Coastsat_nocs has branched from coastsat with the intention of producing large-scale shoreline change analysis. The following changes have been made:
 * Summarise a time period of satellite data. Retrieve median composites of satellite data - E.g. ‘['2000-01-01', '2000-12-31']’ single shoreline from annual composite.
@@ -11,6 +11,8 @@ Coastsat_nocs has branched from coastsat with the intention of producing large-s
 * Automated shoreline cleaning models
 * Instructions for shoreline change rate and forecasting (10- and 20-Year) using Digital Shoreline Analysis System (DSAS) - ArcMap plug-in.
 
+**WARNING**. We have experienced issues with processing shorelines from Landsat 5 satellites (unless they are merged with Landsat 7). Coastsat_nocs was developed with version CoastSat v1.0.1 code, therefore some new functions are not compatible with the nocs modules. **If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
+
 The underlying approach of the CoastSat toolkit are described in detail in:
 * Vos K., Splinter K.D., Harley M.D., Simmons J.A., Turner I.L. (2019). CoastSat: a Google Earth Engine-enabled Python toolkit to extract shorelines from publicly available satellite imagery. *Environmental Modelling and Software*. 122, 104528. https://doi.org/10.1016/j.envsoft.2019.104528
 Example applications and accuracy of the resulting satellite-derived shorelines are discussed in:
@@ -20,8 +22,6 @@ Section 2 includes instructions written by Vos et al. (2019).
 
 Extensions to this toolbox:
 - [Cleaning shoreline output + Shoreline Change using DSAS](https://github.com/sac3g15/coastsat_noc/blob/main/clean_DSAS_models_README.md) - direct references from the DSAS user guide by Himmelstoss et al. (2018).
-
-**WARNING**. Coastsat_nocs was developed with version CoastSat v1.0.1 code, therefore some new functions are not compatible with the nocs modules. **If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
 
 ### Acknowledgements
 Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repository. Also, thanks to USGS for providing the open-sourced Digital Shoreline Analysis System plug-in. Both provide the basis for this workflow which would not exist without it. 
@@ -56,7 +56,7 @@ Data gaps in Landat 7 - Despite median temporal filtering, as a result as a resu
 
 
 ## 1. Installation
-To run the examples you will need to install the coastsat environment and activate Google Earth Engine API (instructions in section 1 from the [CoastSat toolbox](https://github.com/kvos/CoastSat#1-installation)).
+To run the examples you will need to install a new environment (to CoastSat). This respository uses a few more modules than the original. Google Earth Engine API should also be activated (instructions in section 1 from the [CoastSat toolbox](https://github.com/kvos/CoastSat#1-installation)).
 
 ## 2. Usage
 
