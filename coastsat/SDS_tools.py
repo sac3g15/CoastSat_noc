@@ -17,6 +17,8 @@ from shapely import geometry
 import skimage.transform as transform
 from astropy.convolution import convolve
 
+np.seterr(all='ignore') # raise/ignore divisions by 0 and nans
+
 ###################################################################################################
 # COORDINATES CONVERSION FUNCTIONS
 ###################################################################################################
@@ -146,7 +148,7 @@ def convert_epsg(points, epsg_in, epsg_out):
     if type(points) is list:
         points_converted = []
         # iterate over the list
-        for i, arr in enumerate(points):
+        for i, arr in enumerate(points): 
             points_converted.append(np.array(coordTransform.TransformPoints(arr)))
     # if single array
     elif type(points) is np.ndarray:
@@ -405,13 +407,134 @@ def merge_output(output):
         for key in output[satnames[0]].keys():
             output_all[key] = output_all[key] + output[satname][key]
         output_all['satname'] = output_all['satname'] + [_ for _ in np.tile(satname,
-                  len(output[satname]['start']))]
+                  len(output[satname]['dates']))]
     # sort chronologically
-    idx_sorted = sorted(range(len(output_all['start'])), key=output_all['start'].__getitem__)
+    idx_sorted = sorted(range(len(output_all['dates'])), key=output_all['dates'].__getitem__)
     for key in output_all.keys():
         output_all[key] = [output_all[key][i] for i in idx_sorted]
 
     return output_all
+
+
+def remove_duplicates(output):
+    """
+    Function to remove from the output dictionnary entries containing shorelines for 
+    the same date and satellite mission. This happens when there is an overlap between 
+    adjacent satellite images.
+
+    Arguments:
+    -----------
+        output: dict
+            contains output dict with shoreline and metadata
+
+    Returns:
+    -----------
+        output_no_duplicates: dict
+            contains the updated dict where duplicates have been removed
+
+    """
+
+    # nested function
+    def duplicates_dict(lst):
+        "return duplicates and indices"
+        def duplicates(lst, item):
+                return [i for i, x in enumerate(lst) if x == item]
+        return dict((x, duplicates(lst, x)) for x in set(lst) if lst.count(x) > 1)
+
+    dates = output['dates']
+    # make a list with year/month/day
+    dates_str = [_.strftime('%Y%m%d') for _ in dates]
+    # create a dictionnary with the duplicates
+    dupl = duplicates_dict(dates_str)
+    # if there are duplicates, only keep the first element
+    if dupl:
+        output_no_duplicates = dict([])
+        idx_remove = []
+        for k,v in dupl.items():
+            idx_remove.append(v[0])
+        idx_remove = sorted(idx_remove)
+        idx_all = np.linspace(0, len(dates_str)-1, len(dates_str))
+        idx_keep = list(np.where(~np.isin(idx_all,idx_remove))[0])
+        for key in output.keys():
+            output_no_duplicates[key] = [output[key][i] for i in idx_keep]
+        print('%d duplicates' % len(idx_remove))
+        return output_no_duplicates
+    else:
+        print('0 duplicates')
+        return output
+
+def remove_inaccurate_georef(output, accuracy):
+    """
+    Function to remove from the output dictionnary entries containing shorelines 
+    that were mapped on images with inaccurate georeferencing:
+        - RMSE > accuracy for Landsat images
+        - failed geometric test for Sentinel images (flagged with -1)
+
+    Arguments:
+    -----------
+        output: dict
+            contains the extracted shorelines and corresponding metadata
+        accuracy: int
+            minimum horizontal georeferencing accuracy (metres) for a shoreline to be accepted
+
+    Returns:
+    -----------
+        output_filtered: dict
+            contains the updated dictionnary
+
+    """
+
+    # find indices of shorelines to be removed
+    idx = np.where(~np.logical_or(np.array(output['geoaccuracy']) == -1,
+                                  np.array(output['geoaccuracy']) >= accuracy))[0]
+    # idx = np.where(~(np.array(output['geoaccuracy']) >= accuracy))[0]
+    output_filtered = dict([])
+    for key in output.keys():
+        output_filtered[key] = [output[key][i] for i in idx]
+    print('%d bad georef' % (len(output['geoaccuracy']) - len(idx)))
+    return output_filtered
+
+def get_closest_datapoint(dates, dates_ts, values_ts):
+    """
+    Extremely efficient script to get closest data point to a set of dates from a very
+    long time-series (e.g., 15-minutes tide data, or hourly wave data)
+    
+    Make sure that dates and dates_ts are in the same timezone (also aware or naive)
+    
+    KV WRL 2020
+
+    Arguments:
+    -----------
+    dates: list of datetimes
+        dates at which the closest point from the time-series should be extracted
+    dates_ts: list of datetimes
+        dates of the long time-series
+    values_ts: np.array
+        array with the values of the long time-series (tides, waves, etc...)
+        
+    Returns:    
+    -----------
+    values: np.array
+        values corresponding to the input dates
+        
+    """
+    
+    # check if the time-series cover the dates
+    if dates[0] < dates_ts[0] or dates[-1] > dates_ts[-1]: 
+        raise Exception('Time-series do not cover the range of your input dates')
+    
+    # get closest point to each date (no interpolation)
+    temp = []
+    def find(item, lst):
+        start = 0
+        start = lst.index(item, start)
+        return start
+    for i,date in enumerate(dates):
+        print('\rExtracting closest points: %d%%' % int((i+1)*100/len(dates)), end='')
+        temp.append(values_ts[find(min(item for item in dates_ts if item > date), dates_ts)])
+    values = np.array(temp)
+    
+    return values
 
 ###################################################################################################
 # CONVERSIONS FROM DICT TO GEODATAFRAME AND READ/WRITE GEOJSON
@@ -475,7 +598,7 @@ def transects_from_geojson(filename):
 
     return transects
 
-def output_to_gdf(output):
+def output_to_gdf(output, geomtype):
     """
     Saves the mapped shorelines as a gpd.GeoDataFrame    
     
@@ -484,7 +607,9 @@ def output_to_gdf(output):
     Arguments:
     -----------
     output: dict
-        contains the coordinates of the mapped shorelines + attributes          
+        contains the coordinates of the mapped shorelines + attributes
+    geomtype: str
+        'lines' for LineString and 'points' for Multipoint geometry      
                 
     Returns:    
     -----------
@@ -500,22 +625,28 @@ def output_to_gdf(output):
         if len(output['shorelines'][i]) == 0:
             continue
         else:
-            # save the geometry + attributes
-            geom = geometry.LineString(output['shorelines'][i])
+            # save the geometry depending on the linestyle
+            if geomtype == 'lines':
+                geom = geometry.LineString(output['shorelines'][i])
+            elif geomtype == 'points':
+                coords = output['shorelines'][i]
+                geom = geometry.MultiPoint([(coords[_,0], coords[_,1]) for _ in range(coords.shape[0])])
+            else:
+                raise Exception('geomtype %s is not an option, choose between lines or points'%geomtype)
+            # save into geodataframe with attributes
             gdf = gpd.GeoDataFrame(geometry=gpd.GeoSeries(geom))
             gdf.index = [i]
-            gdf.loc[i,'start_date'] = output['start'][i]
-            gdf.loc[i,'end_date'] = output['end'][i]
+            gdf.loc[i,'date'] = output['dates'][i].strftime('%Y-%m-%d %H:%M:%S')
             gdf.loc[i,'satname'] = output['satname'][i]
-            gdf.loc[i,'Median_no'] = output['median_no'][i]
-
+            gdf.loc[i,'geoaccuracy'] = output['geoaccuracy'][i]
+            gdf.loc[i,'cloud_cover'] = output['cloud_cover'][i]
             # store into geodataframe
             if counter == 0:
                 gdf_all = gdf
             else:
                 gdf_all = gdf_all.append(gdf)
-            counter = counter + 1       
-
+            counter = counter + 1
+            
     return gdf_all
 
 def transects_to_gdf(transects):
@@ -550,3 +681,71 @@ def transects_to_gdf(transects):
             gdf_all = gdf_all.append(gdf)
             
     return gdf_all
+
+def get_image_bounds(fn):
+    """
+    Returns a polygon with the bounds of the image in the .tif file
+     
+    KV WRL 2020
+
+    Arguments:
+    -----------
+    fn: str
+        path to the image (.tif file)         
+                
+    Returns:    
+    -----------
+    bounds_polygon: shapely.geometry.Polygon
+        polygon with the image bounds
+        
+    """
+    
+    # nested functions to get the extent 
+    # copied from https://gis.stackexchange.com/questions/57834/how-to-get-raster-corner-coordinates-using-python-gdal-bindings
+    def GetExtent(gt,cols,rows):
+        'Return list of corner coordinates from a geotransform'
+        ext=[]
+        xarr=[0,cols]
+        yarr=[0,rows]
+        for px in xarr:
+            for py in yarr:
+                x=gt[0]+(px*gt[1])+(py*gt[2])
+                y=gt[3]+(px*gt[4])+(py*gt[5])
+                ext.append([x,y])
+            yarr.reverse()
+        return ext
+    
+    # load .tif file and get bounds
+    data = gdal.Open(fn, gdal.GA_ReadOnly)
+    gt = data.GetGeoTransform()
+    cols = data.RasterXSize
+    rows = data.RasterYSize
+    ext = GetExtent(gt,cols,rows)
+    
+    return geometry.Polygon(ext)
+
+def smallest_rectangle(polygon):
+    """
+    Converts a polygon to the smallest rectangle polygon with sides parallel
+    to coordinate axes.
+     
+    KV WRL 2020
+
+    Arguments:
+    -----------
+    polygon: list of coordinates 
+        pair of coordinates for 5 vertices, in clockwise order,
+        first and last points must match     
+                
+    Returns:    
+    -----------
+    polygon: list of coordinates
+        smallest rectangle polygon
+        
+    """
+    
+    multipoints = geometry.Polygon(polygon[0])
+    polygon_geom = multipoints.envelope
+    coords_polygon = np.array(polygon_geom.exterior.coords)
+    polygon_rect = [[[_[0], _[1]] for _ in coords_polygon]]
+    return polygon_rect
