@@ -32,8 +32,7 @@ from scipy import ndimage
 
 np.seterr(all='ignore') # raise/ignore divisions by 0 and nans
 
-
-def check_images_available(inputs):
+def noc_check_images_available(inputs):
     """
     Create the structure of subfolders for each satellite mission
      
@@ -183,7 +182,6 @@ def get_s2_sr_cld_col(aoi, start_date, end_date, CLOUD_FILTER):
         })
     })), sum_img
     
-
 def obtain_image_median(collection, time_range, area, satname, settings):
     """ Selection of median from a collection of images in the Earth Engine library
     See also: https://developers.google.com/earth-engine/reducers_image_collection
@@ -732,8 +730,7 @@ def obtain_image_median(collection, time_range, area, satname, settings):
         # image_median = image_2.median()
         return image_median, sum_img 
 
-
-def retrieve_images(settings, inputs):
+def noc_retrieve_images(settings, inputs):
     """
     Downloads all images from Landsat 5, Landsat 7, Landsat 8 and Sentinel-2
     covering the area of interest and acquired between the specified dates.
@@ -781,7 +778,7 @@ def retrieve_images(settings, inputs):
     ee.Initialize()
     
     # check image availabiliy and retrieve list of images
-    im_dict_T1, sum_img = check_images_available(inputs)
+    im_dict_T1, sum_img = noc_check_images_available(inputs)
     
     # create a new directory for this site with the name of the site
     im_folder = os.path.join(inputs['filepath'],inputs['sitename'])
@@ -794,7 +791,7 @@ def retrieve_images(settings, inputs):
     # Landsat 5 download   
     if satname == ['L5']:
         # create subfolder structure to store the different bands
-        filepaths = create_folder_structure(im_folder, 'L5')
+        filepaths = noc_create_folder_structure(im_folder, 'L5')
         # initialise variables and loop through images
         filenames = []; all_names = [];
         #for year in sat_list:
@@ -867,7 +864,7 @@ def retrieve_images(settings, inputs):
 # Landsat 7 download                
     elif satname == ['L7']:
         # create subfolder structure to store the different bands
-        filepaths = create_folder_structure(im_folder, 'L7')
+        filepaths = noc_create_folder_structure(im_folder, 'L7')
         # initialise variables and loop through images
         filenames = []; all_names = [];
         #for year in sat_list:
@@ -949,7 +946,7 @@ def retrieve_images(settings, inputs):
     # Landsat 8 download                
     elif satname == ['L8']:
         # create subfolder structure to store the different bands
-        filepaths = create_folder_structure(im_folder, 'L8')
+        filepaths = noc_create_folder_structure(im_folder, 'L8')
         # initialise variables and loop through images
         filenames = []; all_names = [];
         #for year in sat_list:
@@ -1039,7 +1036,7 @@ def retrieve_images(settings, inputs):
         # Sentinel 2 download                
     elif satname == ['S2']:
         # create subfolder structure to store the different bands
-        filepaths = create_folder_structure(im_folder, 'S2')
+        filepaths = noc_create_folder_structure(im_folder, 'S2')
         # initialise variables and loop through images
         filenames = []; all_names = [];
         #for year in sat_list:
@@ -1112,19 +1109,6 @@ def retrieve_images(settings, inputs):
                     'start_date': inputs['dates'][0],
                     'end_date': inputs['dates'][1],
                     'median_no': sum_img
-                    
-                    #'LCloudScore': settings['LCloudScore'],         # Mean cloud score threshold (include images with less then threshold)
-                    #'add_L7_to_L5': settings['add_L7_to_L5'],       # Add Landsat 7 to Landsat 5 median composite if they are in same time period
-                    #'add_L5_to_L7': settings['add_L5_to_L7'],       # Add Landsat 5 to Landsat 7 median composite if they are in same time period
-                    #'add_L7_to_L8': settings['add_L7_to_L8'],       # Add Landsat 7 to Landsat 8 median composite if they are in same time period
-                    #'LCloudThreshold': settings['LCloudThreshold'], # Pixels from a single image in a collection larger than this cloud score threshold
-                    #                                                # will be masked.
-                    ## Sentinel
-                    #'CLOUD_FILTER': settings['CLOUD_FILTER'],       # [Integer] Maximum image cloud cover percent allowed in image collection'
-                    #'CLD_PRB_THRESH': settings['CLD_PRB_THRESH'],   # {Integer] Cloud probability (%); values greater than are considered cloud
-                    #'NIR_DRK_THRESH': settings['NIR_DRK_THRESH'],   # [Float] Near-infrared reflectance; values less than are considered potential cloud shadow
-                    #'CLD_PRJ_DIST': settings['CLD_PRJ_DIST'],       # [Float] Maximum distance (km) to search for cloud shadows from cloud edges |
-                    #'BUFFER': settings['BUFFER']
                     } 
           
     # write metadata
@@ -1134,7 +1118,7 @@ def retrieve_images(settings, inputs):
     print('')
              
     # once all images have been downloaded, load metadata from .txt files
-    metadata = get_metadata(inputs)
+    metadata = noc_get_metadata(inputs)
           
     # save metadata dict
     with open(os.path.join(im_folder, inputs['sitename'] + '_metadata' + '.pkl'), 'wb') as f:
@@ -1170,7 +1154,7 @@ def get_url(name, image, scale, region, filepath, bands):
     with zipfile.ZipFile(local_zip) as local_zipfile:
         return local_zipfile.extractall(path=str(filepath))
 
-def create_folder_structure(im_folder, sat_list):
+def noc_create_folder_structure(im_folder, sat_list):
     """
     Create the structure of subfolders for each satellite mission
      
@@ -1207,42 +1191,8 @@ def create_folder_structure(im_folder, sat_list):
     
     return filepaths        
 
-def remove_cloudy_images(im_list, sat_list, prc_cloud_cover=40):
-    """
-    Removes from the EE collection very cloudy images (>95% cloud cover)
 
-    KV WRL 2018       
-   
-    Arguments:
-    -----------
-    im_list: list 
-        list of images in the collection
-    sat_list:
-        name of the satellite mission
-    prc_cloud_cover: int
-        percentage of cloud cover acceptable on the images
-    
-    Returns:
-    -----------
-    im_list_upt: list
-        updated list of images
-    """
-    
-    # remove very cloudy images from the collection (>95% cloud)
-    if sat_list in ['L5','L7','L8']:
-        cloud_property = 'CLOUD_COVER'
-    elif sat_list in ['S2']:
-        cloud_property = 'CLOUDY_PIXEL_PERCENTAGE'
-    cloud_cover = [_['properties'][cloud_property] for _ in im_list]
-    if np.any([_ > prc_cloud_cover for _ in cloud_cover]):
-        idx_delete = np.where([_ > prc_cloud_cover for _ in cloud_cover])[0]
-        im_list_upt = [x for k,x in enumerate(im_list) if k not in idx_delete]
-    else:
-        im_list_upt = im_list
-        
-    return im_list_upt
-
-def get_metadata(inputs):
+def noc_get_metadata(inputs):
     """
     Gets the metadata from the downloaded images by parsing .txt files located 
     in the \meta subfolder. 
