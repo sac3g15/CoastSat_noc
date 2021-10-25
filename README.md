@@ -21,7 +21,7 @@ Section 2 includes instructions written by Vos et al. (2019).
 Extensions to this toolbox:
 - [Cleaning shoreline output + Shoreline Change using DSAS](https://github.com/sac3g15/coastsat_noc/blob/main/clean_DSAS_models_README.md) - direct references from the DSAS user guide by Himmelstoss et al. (2018).
 
-**WARNING**. Coastsat_nocs was developed with version CoastSat v1.0.1 code, therefore some new functions are not compatible with the nocs modules. **If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
+**WARNING**. Coastsat_nocs was developed with version CoastSat v1.0.1 code, therefore some new functions are not compatible with the nocs modules. It is recommended that CoastSat and CoastSat_nocs are run seperately to ensure that the full cabability of each repository is achieved. **If errors persist please checking the section 'Potential Errors / Solutions' at the bottom of the page. Errors still occur? Please raise an issue.**
 
 ### Acknowledgements
 Thanks to Kilian Vos and colleagues for providing the open-sourced Coastsat repository. Also, thanks to USGS for providing the open-sourced Digital Shoreline Analysis System plug-in. Both provide the basis for this workflow which would not exist without it. 

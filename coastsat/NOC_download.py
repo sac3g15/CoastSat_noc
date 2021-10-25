@@ -2,7 +2,9 @@
 This module contains all the functions needed to download the satellite images 
 from the Google Earth Engine server
     
-Author: Kilian Vos, Water Research Laboratory, University of New South Wales
+Based on original author: Kilian Vos, Water Research Laboratory, University of New South Wales
+Modified by: Stephen Carpenter, National Oceanography Centre, UK
+
 """
 
 # load modules
