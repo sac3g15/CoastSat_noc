@@ -36,7 +36,7 @@ def noc_check_images_available(inputs):
     """
     Create the structure of subfolders for each satellite mission
      
-    KV WRL 2018       
+    KV WRL 2018  [modified by SC 2021]     
   
     Arguments:
     -----------
@@ -86,6 +86,8 @@ def noc_check_images_available(inputs):
 def time_in_range(start, end, x):
     """
     Return true if x is in the date range [start, end]
+    
+    SC 2021
 
     Parameters
     ----------
@@ -124,6 +126,7 @@ def get_s2_sr_cld_col(aoi, start_date, end_date, CLOUD_FILTER):
     the `system:index` property. The result is a copy of the SR collection
     where each image has a new `'s2cloudless'` property whose value is the
     corresponding s2cloudless image.
+    
 
     Parameters
     ----------
@@ -185,6 +188,8 @@ def get_s2_sr_cld_col(aoi, start_date, end_date, CLOUD_FILTER):
 def obtain_image_median(collection, time_range, area, satname, settings):
     """ Selection of median from a collection of images in the Earth Engine library
     See also: https://developers.google.com/earth-engine/reducers_image_collection
+
+    SC 2021
 
     Parameters:
         collection (): name of the collection
@@ -731,13 +736,14 @@ def obtain_image_median(collection, time_range, area, satname, settings):
         return image_median, sum_img 
 
 def noc_retrieve_images(settings, inputs):
+    
     """
     Downloads all images from Landsat 5, Landsat 7, Landsat 8 and Sentinel-2
     covering the area of interest and acquired between the specified dates.
     The downloaded images are in .TIF format and organised in subfolders, divided
     by satellite mission. The bands are also subdivided by pixel resolution.
 
-    KV WRL 2018
+    KV WRL 2018 [modified SC 2021]
 
     Arguments:
     -----------
@@ -1127,7 +1133,9 @@ def noc_retrieve_images(settings, inputs):
     return metadata
 
 def get_url(name, image, scale, region, filepath, bands):
-    """It will open and download automatically a zip folder containing Geotiff data of 'image'.
+    
+    """
+    It will open and download automatically a zip folder containing Geotiff data of 'image'.
     If additional parameters are needed, see also:
     https://github.com/google/earthengine-api/blob/master/python/ee/image.py
 
@@ -1155,10 +1163,11 @@ def get_url(name, image, scale, region, filepath, bands):
         return local_zipfile.extractall(path=str(filepath))
 
 def noc_create_folder_structure(im_folder, sat_list):
+    
     """
     Create the structure of subfolders for each satellite mission
      
-    KV WRL 2018       
+    KV WRL 2018 [modified SC 2021]
   
     Arguments:
     -----------
@@ -1197,7 +1206,7 @@ def noc_get_metadata(inputs):
     Gets the metadata from the downloaded images by parsing .txt files located 
     in the \meta subfolder. 
     
-    KV WRL 2018
+    KV WRL 2018 [modified SC 2021]
         
     Arguments:
     -----------
@@ -1256,6 +1265,27 @@ def noc_get_metadata(inputs):
     return metadata
 
 def Landsat_Coregistration(inputs):
+        
+        """
+        Function to Coregister Landsat and Sentinel-2 images 
+        [NOT CURRENTLY AN EFFECTIVE METHOD]
+        
+        SC 2021
+        
+        Arguements:
+        ----------------    
+        inputs
+        'inputs': dict
+            input parameters (sitename, filepath, polygon, dates, sat_list)  
+        
+            
+        Returns:
+        -------------
+        displacement: array
+            Coregistered Landsat Image
+            
+        """
+        
         #Co-register with Sentinel image
         #Find Overlapping cloud-minimal image of Landsat 8 and Sentinel 2
         #Landsat 8 image
