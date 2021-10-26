@@ -536,7 +536,7 @@ def noc_extract_shorelines(metadata, settings, inputs):
     # change the format to have one list sorted by date with all the shorelines (easier to use)
     output = SDS_tools.merge_output(output)
 
-    # save outputput structure as output.pkl
+    # save output structure as output.pkl
     filepath = os.path.join(filepath_data, sitename)
     with open(os.path.join(filepath, sitename + '_output.pkl'), 'wb') as f:
         pickle.dump(output, f)
