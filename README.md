@@ -22,6 +22,9 @@ The underlying approach of the CoastSat toolkit are described in detail in:
 Example applications and accuracy of the resulting satellite-derived shorelines are discussed in:
 * Vos K., Harley M.D., Splinter K.D., Simmons J.A., Turner I.L. (2019). Sub-annual to multi-decadal shoreline variability from publicly available satellite imagery. *Coastal Engineering*. 150, 160–174. https://doi.org/10.1016/j.coastaleng.2019.04.004
 
+Please use the following reference when using this tool:
+"Carpenter, S (2021) Coastsat_nocs source code (Version 1.5) [Source code]. https://github.com/sac3g15/CoastSat_noc"
+
 Section 2 includes instructions written by Vos et al. (2019).
 
 Extensions to this toolbox:
